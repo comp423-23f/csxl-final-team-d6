@@ -25,8 +25,16 @@ As Sally Student, I want to be able to view which of my friends are already chec
 **Story D**
 As Sally Student, I want to have option to see where my friends are sitting. This way, I can easily find them.
 
+## Wireframe
+
+**Home Page**
+
 ![Wireframe_Home](images/wireframe0.png)
 
+**Friends Page**
+
 ![Wireframe_friends](images/wireframe1.png)
+
+**Edit Friends Page**
 
 ![Wireframe_editFriends](images/wireframe2.png)
