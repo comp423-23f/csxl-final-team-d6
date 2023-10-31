@@ -11,8 +11,8 @@ This feature will allow students to connect with and make friends within other s
 **Sally Student**
 **Persona Description** Sally is a student and wants to friend request her peers in the computer science program and be able to see which students are checked into the XL and where they are sitting at. Sally's main needs and goals of this feature are to be able to connect with other students and find out when and where they will be in the XL and possibly collaborate with them on various projects and assignments. She also wants to be able to remove friends from her friend list.
 
-
 ## User Stories
+
 **Story A**
 As Sally Student, I want to be able to send friends requests to my peers and see a list of all of my friends.
 
@@ -24,3 +24,17 @@ As Sally Student, I want to be able to view which of my friends are already chec
 
 **Story D**
 As Sally Student, I want to have option to see where my friends are sitting. This way, I can easily find them.
+
+## Wireframe
+
+**Home Page**
+
+![Wireframe_Home](images/wireframe0.png)
+
+**Friends Page**
+
+![Wireframe_friends](images/wireframe1.png)
+
+**Edit Friends Page**
+
+![Wireframe_editFriends](images/wireframe2.png)
