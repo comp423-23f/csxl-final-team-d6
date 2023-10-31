@@ -1,14 +1,15 @@
-Title and team:
-XL Friendship System
-Members: Jasper Ou, Nikhil Sarin, Amit Garine
+# Friendship System XML
 
-Overview:
-The objective of the XL friendship system is to allow students who visit the XL to requests friendships with other peers. A student will then be able to view the coworking status of all of their 'friends' - this will tell the user which of their 'friends' are currently within the XL and where they are located. The user should also be able to unadd friends from their friend list.
+### Authors: Amit Garine, Jasper Ou, Wilson Haynie, Nikhil Sarin
 
-Key Personas:
+## Overview
 
-Sam Student: Sam is a CS student who frequently works within the XL. He wants to be able to send a friend request to his friend group who commonly works in the XL - Sam wants to be able to see where all of his friends are working within the XL and if they are sitting with any of his other friends.
+This feature will allow students to connect with and make friends within other students/peers in the CS program. Students can send friend requests to other students. The student receiving the friend request can accept/decline the request and if they are already friends the student can unadd the friend as well. Once friendship connections are established, students can identify which friends are currently available at the XL coworking space and where they're seated. This system will make the overall experience of group study and collaboration more seamless and efficient.
 
-Ally Ambassador: Ally is an ambassador for the XL who works at the XL check-in desk. Ally should be able to see which groups
+## Key Personas
 
-Mark Manager: Mark is the manager of the XL and wants to be able
+**Sally Student**
+**Persona Description** Sally is a student and wants to friend request her peers in the computer science program and be able to see which students are checked into the XL and where they are sitting at. Sally's main needs and goals of this feature are to be able to connect with other students and find out when and where they will be in the XL and possibly collaborate with them on various projects and assignments. She also wants to be able to remove friends from her friend list.
+
+**Larry Club Leader**
+**Persona Description** Larry is a club leader and wants to friend request members of the club so they can see where and when he is checked into the XL and be able to connect with members of the club. Club members can also see when he is checked in and be able to come and work on club projects with him.
