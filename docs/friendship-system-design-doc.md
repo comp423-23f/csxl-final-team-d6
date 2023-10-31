@@ -14,13 +14,13 @@ This feature will allow students to connect with and make friends within other s
 
 ## User Stories
 **Story A**
-As Sally Student, I want to be able to send friends requests to my peers and see a list of all of my friends
+As Sally Student, I want to be able to send friends requests to my peers and see a list of all of my friends.
 
 **Story B**
-As Sally Student, I want to be notified of when someone else friends me and have the option to accept/reject pending requests
+As Sally Student, I want to be notified of when someone else friends me and have the option to accept/reject pending requests.
 
 **Story C**
-As Sally Student, I want to be able to view which of my friends are already checked into the XL.
+As Sally Student, I want to be able to view which of my friends are already checked into the XL. This way, I will be able to see who is currently working in the XL.
 
 **Story D**
 As Sally Student, I want to have option to see where my friends are sitting. This way, I can easily find them.
