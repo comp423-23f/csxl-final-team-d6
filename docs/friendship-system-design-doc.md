@@ -58,6 +58,7 @@ PUT /friends/accept/{requester_id}: To accept friend requests
 PUT /friends/declines/{requester_id}: To decline a friend request
 DELETE /friends/{friend_id}: to unadd a friend.
 GET Friends API request to search for users based on query
+
 **Modifying**
 We intend to modify User routes to include a list of friends/friend requests for the user. Also we intend to modify reservation routes to include friends that are in the reserved time slot.
 
