@@ -1,1 +1,21 @@
-<p>friends-page works!</p>
+<div>
+  <!-- Add a new friend section -->
+  <h2>Add a new friend</h2>
+
+  <label for="friendId">Friend ID:</label>
+  <input type="number" id="friendId" [(ngModel)]="newFriendId" />
+
+  <label for="friendName">Friend Name:</label>
+  <input type="text" id="friendName" [(ngModel)]="newFriendName" />
+
+  <button (click)="addFriend()">Add Friend</button>
+</div>
+
+<!-- List of friends section -->
+<h2>List of Friends</h2>
+<ul>
+  <li *ngFor="let friend of friends">
+    {{ friend.name }} (ID: {{ friend.id }})
+    <button (click)="deleteFriend(friend.id)">Delete</button>
+  </li>
+</ul>
