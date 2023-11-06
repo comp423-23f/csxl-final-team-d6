@@ -1,41 +1,57 @@
 <!-- Header for Coworking Status -->
-<h1>Coworking Status</h1>
+<mat-card>
+  <mat-card-title>Coworking Status</mat-card-title>
 
-<!-- Section to toggle working status -->
-<div>
-  <h2>Toggle Working Status</h2>
-  <ul>
-    <li *ngFor="let friend of friends">
-      {{ friend.name }} (ID: {{ friend.id }})
-      <span [class.working]="friend.isWorking">
-        {{ friend.isWorking ? 'Working' : 'Not Working' }}
-      </span>
-      <button (click)="toggleWorkingStatus(friend.id)">
-        Toggle Working Status
-      </button>
-    </li>
-  </ul>
-</div>
+  <!-- Section to toggle working status -->
+  <mat-card-content>
+    <mat-card-header>
+      <mat-card-title>Toggle Working Status</mat-card-title>
+    </mat-card-header>
+    <mat-list>
+      <mat-list-item *ngFor="let friend of friends">
+        {{ friend.name }} (ID: {{ friend.id }})
+        <span [class.working]="friend.isWorking">
+          {{ friend.isWorking ? 'Working' : 'Not Working' }}
+        </span>
+        <button mat-button (click)="toggleWorkingStatus(friend.id)">
+          Toggle Working Status
+        </button>
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>
 
 <!-- Section to add a new friend -->
-<div>
-  <h2>Add a new friend</h2>
-  <label for="friendId">Friend ID:</label>
-  <input type="number" id="friendId" [(ngModel)]="newFriendId" />
+<mat-card>
+  <mat-card-title>Add a New Friend</mat-card-title>
+  <mat-card-content>
+    <mat-form-field>
+      <mat-label>Friend ID</mat-label>
+      <input matInput type="number" [(ngModel)]="newFriendId" />
+    </mat-form-field>
 
-  <label for="friendName">Friend Name:</label>
-  <input type="text" id="friendName" [(ngModel)]="newFriendName" />
+    <mat-form-field>
+      <mat-label>Friend Name</mat-label>
+      <input matInput type="text" [(ngModel)]="newFriendName" />
+    </mat-form-field>
 
-  <button (click)="addFriend()">Add Friend</button>
-</div>
+    <button mat-raised-button color="primary" (click)="addFriend()">
+      Add Friend
+    </button>
+  </mat-card-content>
+</mat-card>
 
 <!-- Section to list all friends -->
-<div>
-  <h2>List of Friends</h2>
-  <ul>
-    <li *ngFor="let friend of friends">
-      {{ friend.name }} (ID: {{ friend.id }})
-      <button (click)="deleteFriend(friend.id)">Delete</button>
-    </li>
-  </ul>
-</div>
+<mat-card>
+  <mat-card-title>List of Friends</mat-card-title>
+  <mat-card-content>
+    <mat-list>
+      <mat-list-item *ngFor="let friend of friends">
+        {{ friend.name }} (ID: {{ friend.id }})
+        <button mat-icon-button color="warn" (click)="deleteFriend(friend.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>
