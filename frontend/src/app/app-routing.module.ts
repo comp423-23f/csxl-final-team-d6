@@ -7,6 +7,7 @@ import { ProfileEditorComponent } from './profile/profile-editor/profile-editor.
 import { CoworkingPageComponent } from './coworking/coworking-home/coworking-home.component';
 import { AmbassadorPageComponent } from './coworking/ambassador-home/ambassador-home.component';
 import { AboutComponent } from './about/about.component';
+import { FriendsPageComponent } from './friends-page/friends-page.component';
 
 const routes: Routes = [
   HomeComponent.Route,
@@ -20,6 +21,11 @@ const routes: Routes = [
     title: 'Cowork in the XL',
     loadChildren: () =>
       import('./coworking/coworking.module').then((m) => m.CoworkingModule)
+  },
+  {
+    path: 'friends',
+    component: FriendsPageComponent,
+    title: 'Friends'
   },
   {
     path: 'admin',
