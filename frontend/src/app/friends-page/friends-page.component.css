@@ -59,4 +59,80 @@ h1, h2 {
     display: block;
     margin-top: 10px;
   }
-  
+
+/* Styles for the friends list card */
+.friends-list-card .mat-card-header .mat-card-title {
+  color: #333; /* Change as necessary */
+}
+
+/* Friend information container */
+.friend-info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+/* Button within mat-list-item */
+.delete-button {
+  margin-left: auto; /* Push to the right */
+}
+
+/* Override for Angular Material list items */
+.mat-nav-list .mat-list-item {
+  border-radius: 4px;
+  margin-bottom: 10px; /* Space between items */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional */
+}
+
+/* Status indicators */
+.working {
+  background-color: #4CAF50; /* Green when working */
+}
+
+.not-working {
+  background-color: #f44336; /* Red when not working */
+}
+
+/* Custom divider */
+.friends-list-card .mat-divider {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Adapting the button styles for Material buttons */
+.mat-icon-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.mat-icon-button:hover {
+  background-color: #0056b3;
+}
+
+/* Styles for status text */
+.friends-list-card .mat-list-item h3,
+.friends-list-card .mat-list-item p {
+  margin: 0;
+}
+
+/* Specific adjustments for friend name and ID */
+.friends-list-card .mat-list-item h3 {
+  font-size: 1em; /* Adjust size as needed */
+}
+
+
+.mat-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.list-item-content {
+  flex-grow: 1; /* ensures that the content takes up the available space */
+}
+
+.list-item-actions {
+  display: flex;
+  gap: 8px; /* adds space between buttons */
+}
+
