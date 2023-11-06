@@ -7,8 +7,8 @@ import { FriendsService } from './friends.service';
   styleUrls: ['./friends-page.component.css']
 })
 export class FriendsPageComponent implements OnInit {
-  friends: { id: number; name: string }[] = [];
-  newFriendId: number | null = null; // <-- Updated this line
+  friends: { id: number; name: string; isWorking: boolean }[] = []; // Updated type here
+  newFriendId: number | null = null;
   newFriendName: string = '';
 
   constructor(private friendsService: FriendsService) {}
@@ -23,7 +23,6 @@ export class FriendsPageComponent implements OnInit {
 
   addFriend() {
     if (this.newFriendId !== null) {
-      // Make sure to add this check
       this.friendsService.addFriend(this.newFriendId, this.newFriendName);
       this.newFriendId = null;
       this.newFriendName = '';
@@ -33,6 +32,12 @@ export class FriendsPageComponent implements OnInit {
 
   deleteFriend(id: number) {
     this.friendsService.deleteFriend(id);
+    this.loadAllFriends();
+  }
+
+  toggleWorkingStatus(id: number) {
+    this.friendsService.toggleWorkingStatus(id);
+    // Update the list to reflect the new status
     this.loadAllFriends();
   }
 }

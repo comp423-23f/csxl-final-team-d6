@@ -29,13 +29,13 @@
         <a mat-list-item routerLink="/organizations">Organizations</a>
         <a mat-list-item routerLink="/events">Events</a>
         <a mat-list-item routerLink="/about">About the XL</a>
+        <a mat-list-item routerLink="/friends">Friends</a>
         <mat-divider></mat-divider>
         <div *ngIf="ambassadorPermission$ | async">
           <a mat-list-item routerLink="/coworking/ambassador">XL Ambassador</a>
         </div>
         <div *ngIf="adminPermission$ | async">
           <a mat-list-item routerLink="/admin">User Admin</a>
-          <a mat-list-item routerLink="/friends">Friends</a>
         </div>
         <a
           mat-list-item
