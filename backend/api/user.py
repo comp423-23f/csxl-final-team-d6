@@ -39,6 +39,7 @@ def create_friend_request(
     Send a friend request to another user.
     """
     # This would be replaced with the actual logic to send a friend request
+    # Need to connect to front end
     return user_svc.send_friend_request(subject, target_user_id)
 
 
@@ -50,4 +51,5 @@ def get_friends_status(
     Get the coworking status of friends.
     """
     # This would be replaced with the actual logic to retrieve friends' statuses
+    # Need to connect to front end
     return user_svc.get_friends_status(subject)
