@@ -1,1 +1,41 @@
-<p>friends-page works!</p>
+<!-- Header for Coworking Status -->
+<h1>Coworking Status</h1>
+
+<!-- Section to toggle working status -->
+<div>
+  <h2>Toggle Working Status</h2>
+  <ul>
+    <li *ngFor="let friend of friends">
+      {{ friend.name }} (ID: {{ friend.id }})
+      <span [class.working]="friend.isWorking">
+        {{ friend.isWorking ? 'Working' : 'Not Working' }}
+      </span>
+      <button (click)="toggleWorkingStatus(friend.id)">
+        Toggle Working Status
+      </button>
+    </li>
+  </ul>
+</div>
+
+<!-- Section to add a new friend -->
+<div>
+  <h2>Add a new friend</h2>
+  <label for="friendId">Friend ID:</label>
+  <input type="number" id="friendId" [(ngModel)]="newFriendId" />
+
+  <label for="friendName">Friend Name:</label>
+  <input type="text" id="friendName" [(ngModel)]="newFriendName" />
+
+  <button (click)="addFriend()">Add Friend</button>
+</div>
+
+<!-- Section to list all friends -->
+<div>
+  <h2>List of Friends</h2>
+  <ul>
+    <li *ngFor="let friend of friends">
+      {{ friend.name }} (ID: {{ friend.id }})
+      <button (click)="deleteFriend(friend.id)">Delete</button>
+    </li>
+  </ul>
+</div>

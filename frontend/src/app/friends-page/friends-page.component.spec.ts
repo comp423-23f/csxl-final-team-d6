@@ -11,7 +11,6 @@ describe('FriendsPageComponent', () => {
       declarations: [FriendsPageComponent]
     }).compileComponents();
 
-
     fixture = TestBed.createComponent(FriendsPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
