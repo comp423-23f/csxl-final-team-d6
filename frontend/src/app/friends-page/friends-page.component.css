@@ -1,0 +1,138 @@
+/* Global styles */
+h1, h2 {
+    color: #333;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Working status indicator styles */
+  .working {
+    padding: 2px 5px;
+    margin-left: 10px;
+    color: white;
+    background-color: #4CAF50; /* Green when working */
+  }
+  
+  .working:not(.working) {
+    background-color: #f44336; /* Red when not working */
+  }
+  
+  /* List styles */
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  li {
+    margin: 10px 0;
+    padding: 5px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  /* Button styles */
+  button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Input field styles */
+  input[type="text"],
+  input[type="number"] {
+    padding: 5px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  label {
+    display: block;
+    margin-top: 10px;
+  }
+
+/* Styles for the friends list card */
+.friends-list-card .mat-card-header .mat-card-title {
+  color: #333; /* Change as necessary */
+}
+
+/* Friend information container */
+.friend-info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+/* Button within mat-list-item */
+.delete-button {
+  margin-left: auto; /* Push to the right */
+}
+
+/* Override for Angular Material list items */
+.mat-nav-list .mat-list-item {
+  border-radius: 4px;
+  margin-bottom: 10px; /* Space between items */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional */
+}
+
+/* Status indicators */
+.working {
+  background-color: #4CAF50; /* Green when working */
+}
+
+.not-working {
+  background-color: #f44336; /* Red when not working */
+}
+
+/* Custom divider */
+.friends-list-card .mat-divider {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Adapting the button styles for Material buttons */
+.mat-icon-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.mat-icon-button:hover {
+  background-color: #0056b3;
+}
+
+/* Styles for status text */
+.friends-list-card .mat-list-item h3,
+.friends-list-card .mat-list-item p {
+  margin: 0;
+}
+
+/* Specific adjustments for friend name and ID */
+.friends-list-card .mat-list-item h3 {
+  font-size: 1em; /* Adjust size as needed */
+}
+
+
+.mat-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.list-item-content {
+  flex-grow: 1; /* ensures that the content takes up the available space */
+}
+
+.list-item-actions {
+  display: flex;
+  gap: 8px; /* adds space between buttons */
+}
+
