@@ -188,3 +188,29 @@ class UserService:
             FriendStatus(friend_id=3, checked_in=False, seat_number=None),
             # Add more stubbed friends status
         ]
+
+    def remove_friend(self, subject: User, friend_id: int) -> FriendRequestResponse:
+        # logic to remove friend will be implemented here
+        # The remove friend feature will remove an individual from the users friends list
+        # stubbed response for now
+
+        assert subject.id is not None, "subject.id is None"
+        return FriendRequestResponse(
+            request_id=1,
+            requester_id=subject.id,
+            requestee_id=friend_id,
+            status="removed",
+        )
+
+    def favorite_friend(self, subject: User, friend_id: int) -> FriendRequestResponse:
+        # logic to mark a friend as a favorite will be implemented here
+        # A favorite student will show up at the top of the users friends list/Co-working status
+        # stubbed response for now
+        assert subject.id is not None, "subject.id is None"
+
+        return FriendRequestResponse(
+            request_id=2,
+            requester_id=subject.id,
+            requestee_id=friend_id,
+            status="favorite",
+        )
