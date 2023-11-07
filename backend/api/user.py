@@ -82,6 +82,6 @@ def favorite_friend(
     user_svc: UserService = Depends(),
 ):
     """
-    Mark a friend as a favorite.
+    Mark a friend as a favorite. This will mean that the favorite is at the top of a users friends list.
     """
     return user_svc.favorite_friend(subject, friend_id)
