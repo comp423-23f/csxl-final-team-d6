@@ -53,3 +53,35 @@ def get_friends_status(
     # This would be replaced with the actual logic to retrieve friends' statuses
     # Need to connect to front end
     return user_svc.get_friends_status(subject)
+
+
+@api.delete(
+    "/friends/{friend_id}", response_model=FriendRequestResponse, tags=["Users"]
+)
+def remove_friend(
+    friend_id: int,
+    subject: User = Depends(registered_user),
+    user_svc: UserService = Depends(),
+):
+    """
+    Remove a friend from the user's friend list.
+    """
+    # This would be replaced with the actual logic to remove a friend
+    # The UserService should have a corresponding method, e.g., user_svc.remove_friend
+    return user_svc.remove_friend(subject, friend_id)
+
+
+@api.post(
+    "/friends/{friend_id}/favorite",
+    response_model=FriendRequestResponse,
+    tags=["Users"],
+)
+def favorite_friend(
+    friend_id: int,
+    subject: User = Depends(registered_user),
+    user_svc: UserService = Depends(),
+):
+    """
+    Mark a friend as a favorite.
+    """
+    return user_svc.favorite_friend(subject, friend_id)
