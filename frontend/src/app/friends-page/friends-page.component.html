@@ -1,57 +1,93 @@
-<!-- Header for Coworking Status -->
-<mat-card>
-  <mat-card-title>Coworking Status</mat-card-title>
-
-  <!-- Section to toggle working status -->
+<mat-card class="content" appearance="outlined">
   <mat-card-content>
-    <mat-card-header>
-      <mat-card-title>Toggle Working Status</mat-card-title>
-    </mat-card-header>
-    <mat-list>
-      <mat-list-item *ngFor="let friend of friends">
-        {{ friend.name }} (ID: {{ friend.id }})
-        <span [class.working]="friend.isWorking">
-          {{ friend.isWorking ? 'Working' : 'Not Working' }}
-        </span>
-        <button mat-button (click)="toggleWorkingStatus(friend.id)">
-          Toggle Working Status
-        </button>
-      </mat-list-item>
-    </mat-list>
+    <!-- Header for Coworking Status -->
+    <mat-card-subtitle>Coworking Status</mat-card-subtitle>
+
+    <!-- Section to toggle working status -->
+    <div>
+      <mat-card-header>
+        <mat-card-title>Working Status</mat-card-title>
+      </mat-card-header>
+      <mat-list>
+        <mat-list-item *ngFor="let friend of friends">
+          {{ friend.name }} (ID: {{ friend.id }})
+          <span [class.working]="friend.isWorking">
+            {{ friend.isWorking ? 'Working' : 'Not Working' }}
+          </span>
+        </mat-list-item>
+      </mat-list>
+    </div></mat-card-content
+  ></mat-card
+>
+
+<mat-card class="content" appearance="outlined">
+  <mat-card-content>
+    <!-- Header for Friend Requests -->
+    <mat-card-subtitle>Friend Requests</mat-card-subtitle>
+
+    <!-- Section for pending requests -->
+    <div>
+      <mat-card-header>
+        <mat-card-title>Pending Requests</mat-card-title>
+      </mat-card-header>
+      <mat-list>
+        <mat-list-item
+          *ngFor="let request of friendRequests"
+          class="friend-request-item">
+          <!-- Friend request details and action buttons container -->
+          <div class="friend-request-content">
+            <!-- Display friend request details -->
+            <span class="request-details">
+              {{ request.name }} (ID: {{ request.id }})
+            </span>
+
+            <!-- Buttons to accept or decline the request -->
+            <div class="request-actions">
+              <button mat-button (click)="acceptFriendRequest(request.id)">
+                Accept
+              </button>
+              <button mat-button (click)="declineFriendRequest(request.id)">
+                Decline
+              </button>
+            </div>
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </div>
   </mat-card-content>
 </mat-card>
 
-<!-- Section to add a new friend -->
-<mat-card>
-  <mat-card-title>Add a New Friend</mat-card-title>
+<mat-card class="content" appearance="outlined">
   <mat-card-content>
-    <mat-form-field>
-      <mat-label>Friend ID</mat-label>
-      <input matInput type="number" [(ngModel)]="newFriendId" />
-    </mat-form-field>
+    <!-- Header for editing friends -->
+    <mat-card-subtitle>Edit Friends</mat-card-subtitle>
 
-    <mat-form-field>
-      <mat-label>Friend Name</mat-label>
-      <input matInput type="text" [(ngModel)]="newFriendName" />
-    </mat-form-field>
+    <!-- Section for friends list -->
+    <div>
+      <mat-card-header>
+        <mat-card-title>Friends List</mat-card-title>
+      </mat-card-header>
+      <mat-list>
+        <mat-list-item *ngFor="let friend of friends" class="friend-item">
+          <!-- Friend details and action buttons container -->
+          <div class="friend-content">
+            <!-- Display friend details -->
+            <span class="friend-details">
+              {{ friend.name }} (ID: {{ friend.id }})
+            </span>
 
-    <button mat-raised-button color="primary" (click)="addFriend()">
-      Add Friend
-    </button>
-  </mat-card-content>
-</mat-card>
-
-<!-- Section to list all friends -->
-<mat-card>
-  <mat-card-title>List of Friends</mat-card-title>
-  <mat-card-content>
-    <mat-list>
-      <mat-list-item *ngFor="let friend of friends">
-        {{ friend.name }} (ID: {{ friend.id }})
-        <button mat-icon-button color="warn" (click)="deleteFriend(friend.id)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </mat-list-item>
-    </mat-list>
+            <!-- Buttons to remove or favorite the friend -->
+            <div class="friend-actions">
+              <button mat-button (click)="deleteFriend(friend.id)">
+                Remove
+              </button>
+              <button mat-button (click)="toggleFavorite(friend.id)">
+                {{ friend.isFavorite ? 'Unfavorite' : 'Favorite' }}
+              </button>
+            </div>
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </div>
   </mat-card-content>
 </mat-card>

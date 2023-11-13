@@ -4,6 +4,13 @@ interface Friend {
   id: number;
   name: string;
   isWorking: boolean;
+  isFavorite: boolean;
+}
+
+// New interface for FriendRequest
+interface FriendRequest {
+  id: number;
+  name: string;
 }
 
 @Injectable({
@@ -16,17 +23,22 @@ export class FriendsService {
     { id: 987654321, name: 'Jane Smith', isWorking: false }
   ];
 
+  // Dummy data for friend requests
+  private friendRequests: FriendRequest[] = [
+    { id: 123456788, name: 'Spongebob' },
+    { id: 887654321, name: 'Patrick' }
+  ];
+
   constructor() {}
 
   // Fetch all friends
   getAllFriends() {
-    alert('Fetching all friends...');
     return this.friends;
   }
 
   // Add a new friend
   addFriend(id: number, name: string) {
-    alert(`Adding friend: ${name}`);
+    alert(`${name} has been added as a friend!`);
     let newId = this.friends.length + 1;
     this.friends.push({ id, name, isWorking: false });
   }
@@ -42,7 +54,6 @@ export class FriendsService {
 
   // Delete friend by id
   deleteFriend(id: number) {
-    alert(`Deleting friend with id ${id}`);
     this.friends = this.friends.filter((f) => f.id !== id);
   }
 
@@ -51,5 +62,26 @@ export class FriendsService {
     if (friend) {
       friend.isWorking = !friend.isWorking;
     }
+  }
+
+  // New method to fetch friend requests
+  getFriendRequests() {
+    return this.friendRequests;
+  }
+
+  // New method to accept a friend request
+  acceptFriendRequest(id: number) {
+    const requestIndex = this.friendRequests.findIndex((req) => req.id === id);
+    if (requestIndex > -1) {
+      // Assuming accepting a friend request adds them to your friends list
+      const request = this.friendRequests[requestIndex];
+      this.addFriend(request.id, request.name);
+      this.friendRequests.splice(requestIndex, 1);
+    }
+  }
+
+  // New method to decline a friend request
+  declineFriendRequest(id: number) {
+    this.friendRequests = this.friendRequests.filter((req) => req.id !== id);
   }
 }
