@@ -2,6 +2,7 @@ from sqlalchemy import Integer, ForeignKey, DateTime, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from .entity_base import EntityBase
 from datetime import datetime
+from .user_entity import UserEntity
 from ..models.friend import (
     FriendRequest as FriendRequestModel,
 )  # Import your Pydantic model
@@ -17,9 +18,18 @@ class FriendRequest(EntityBase):
     is_accepted: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
+    sender_id: Mapped[int] = mapped_column(
+        ForeignKey("user.id"), nullable=False
+    )  # Adjusted to "user.id"
+    receiver_id: Mapped[int] = mapped_column(
+        ForeignKey("user.id"), nullable=False
+    )  # Adjusted to "user.id"
+
     # Relationships
-    sender: Mapped["User"] = relationship("User", foreign_keys=[sender_id])
-    receiver: Mapped["User"] = relationship("User", foreign_keys=[receiver_id])
+    sender: Mapped[UserEntity] = relationship("UserEntity", foreign_keys=[sender_id])
+    receiver: Mapped[UserEntity] = relationship(
+        "UserEntity", foreign_keys=[receiver_id]
+    )
 
     @classmethod
     def from_model(cls, model: FriendRequestModel) -> "FriendRequest":
