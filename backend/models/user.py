@@ -61,16 +61,3 @@ class ProfileForm(BaseModel):
     last_name: str
     email: str
     pronouns: str
-
-
-class FriendRequestResponse(BaseModel):
-    request_id: int
-    requester_id: int
-    requestee_id: int
-    status: str
-
-
-class FriendStatus(BaseModel):
-    friend_id: int
-    checked_in: bool
-    seat_number: str | None

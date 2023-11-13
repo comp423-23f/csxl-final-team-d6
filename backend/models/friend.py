@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from datetime import datetime
 
-__authors__ = ["Your Name", "Other Contributors"]
+__authors__ = ["Nikhil Sarin", "Wilson Haynie", "Amit Garine", "Jasper Ou"]
 __copyright__ = "Copyright 2023"
 __license__ = "MIT"
 
