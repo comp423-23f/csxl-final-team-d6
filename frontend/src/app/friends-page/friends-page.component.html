@@ -10,7 +10,8 @@
       </mat-card-header>
       <mat-list>
         <mat-list-item *ngFor="let friend of friends">
-          {{ friend.name }} (ID: {{ friend.id }})
+          <!-- Display friend's name, ID, and working status with a colon -->
+          {{ friend.name }} (ID: {{ friend.id }}):
           <span [class.working]="friend.isWorking">
             {{ friend.isWorking ? 'Working' : 'Not Working' }}
           </span>
