@@ -19,8 +19,8 @@ interface FriendRequest {
 export class FriendsService {
   // Dummy data for friends
   private friends = [
-    { id: 123456789, name: 'John Doe', isWorking: false },
-    { id: 987654321, name: 'Jane Smith', isWorking: false }
+    { id: 123456789, name: 'John Doe', isWorking: false, isFavorite: false },
+    { id: 987654321, name: 'Jane Smith', isWorking: false, isFavorite: false }
   ];
 
   // Dummy data for friend requests
@@ -40,7 +40,12 @@ export class FriendsService {
   addFriend(id: number, name: string) {
     alert(`${name} has been added as a friend!`);
     let newId = this.friends.length + 1;
-    this.friends.push({ id, name, isWorking: false });
+    this.friends.push({
+      id,
+      name,
+      isWorking: false,
+      isFavorite: false
+    });
   }
 
   // Update friend by id
@@ -83,5 +88,12 @@ export class FriendsService {
   // New method to decline a friend request
   declineFriendRequest(id: number) {
     this.friendRequests = this.friendRequests.filter((req) => req.id !== id);
+  }
+
+  // Method to search for friends by name
+  searchFriends(name: string): Friend[] {
+    return this.friends.filter((friend) =>
+      friend.name.toLowerCase().includes(name.toLowerCase())
+    );
   }
 }

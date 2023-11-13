@@ -24,6 +24,10 @@ export class FriendsPageComponent implements OnInit {
   newFriendId: number | null = null;
   newFriendName: string = '';
 
+  searchQuery: string = '';
+  searchResults: Friend[] = [];
+  showSearchBar: boolean = false;
+
   constructor(private friendsService: FriendsService) {}
 
   ngOnInit() {
@@ -33,6 +37,10 @@ export class FriendsPageComponent implements OnInit {
 
   loadAllFriends() {
     this.friends = this.friendsService.getAllFriends();
+  }
+
+  toggleSearchBar() {
+    this.showSearchBar = !this.showSearchBar;
   }
 
   loadFriendRequests() {
@@ -80,5 +88,21 @@ export class FriendsPageComponent implements OnInit {
     if (friend) {
       friend.isFavorite = !friend.isFavorite; // Toggle the isFavorite property
     }
+  }
+
+  searchFriends() {
+    if (this.searchQuery) {
+      this.searchResults = this.friendsService.searchFriends(this.searchQuery);
+    } else {
+      this.searchResults = [];
+    }
+  }
+
+  addFriendFromSearch(friend: Friend) {
+    this.friendsService.addFriend(friend.id, friend.name);
+    // Optionally, clear search results
+    this.searchQuery = '';
+    this.searchResults = [];
+    this.loadAllFriends();
   }
 }

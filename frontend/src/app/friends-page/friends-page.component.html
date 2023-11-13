@@ -16,9 +16,9 @@
           </span>
         </mat-list-item>
       </mat-list>
-    </div></mat-card-content
-  ></mat-card
->
+    </div>
+  </mat-card-content>
+</mat-card>
 
 <mat-card class="content" appearance="outlined">
   <mat-card-content>
@@ -34,14 +34,10 @@
         <mat-list-item
           *ngFor="let request of friendRequests"
           class="friend-request-item">
-          <!-- Friend request details and action buttons container -->
           <div class="friend-request-content">
-            <!-- Display friend request details -->
             <span class="request-details">
               {{ request.name }} (ID: {{ request.id }})
             </span>
-
-            <!-- Buttons to accept or decline the request -->
             <div class="request-actions">
               <button mat-button (click)="acceptFriendRequest(request.id)">
                 Accept
@@ -59,8 +55,28 @@
 
 <mat-card class="content" appearance="outlined">
   <mat-card-content>
-    <!-- Header for editing friends -->
+    <!-- Header for Editing Friends -->
     <mat-card-subtitle>Edit Friends</mat-card-subtitle>
+
+    <!-- Toggle Button for Search Bar -->
+    <button mat-button (click)="toggleSearchBar()">Add a friend</button>
+
+    <!-- Conditional Search Bar -->
+    <mat-form-field appearance="fill" *ngIf="showSearchBar">
+      <mat-label>Search for friends</mat-label>
+      <input
+        matInput
+        [(ngModel)]="searchQuery"
+        (input)="searchFriends()"
+        placeholder="Enter a name" />
+    </mat-form-field>
+
+    <mat-list *ngIf="searchResults.length > 0">
+      <mat-list-item *ngFor="let result of searchResults">
+        {{ result.name }}
+        <button mat-button (click)="addFriendFromSearch(result)">Add</button>
+      </mat-list-item>
+    </mat-list>
 
     <!-- Section for friends list -->
     <div>
@@ -69,14 +85,10 @@
       </mat-card-header>
       <mat-list>
         <mat-list-item *ngFor="let friend of friends" class="friend-item">
-          <!-- Friend details and action buttons container -->
           <div class="friend-content">
-            <!-- Display friend details -->
             <span class="friend-details">
               {{ friend.name }} (ID: {{ friend.id }})
             </span>
-
-            <!-- Buttons to remove or favorite the friend -->
             <div class="friend-actions">
               <button mat-button (click)="deleteFriend(friend.id)">
                 Remove
