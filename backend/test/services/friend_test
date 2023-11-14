@@ -49,3 +49,10 @@ def test_accept_nonexistent_request(friend_request_service: FriendRequestService
 def test_reject_nonexistent_request(friend_request_service: FriendRequestService):
     result = friend_request_service.reject_request(999)  # Nonexistent request ID
     assert result is None or result.is_accepted is not False
+
+
+def test_list_requests_empty(friend_request_service: FriendRequestService):
+    user_id = 999  # Example user ID with no friend requests
+    requests = friend_request_service.list_requests(user_id)
+    assert isinstance(requests, list)
+    assert len(requests) == 0
