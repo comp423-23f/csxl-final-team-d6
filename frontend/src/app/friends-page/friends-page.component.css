@@ -3,7 +3,7 @@ h1, h2 {
     color: #333;
     font-family: Arial, sans-serif;
   }
-  
+ 
   /* Working status indicator styles */
   .working {
     padding: 2px 5px;
@@ -134,5 +134,51 @@ h1, h2 {
 .list-item-actions {
   display: flex;
   gap: 8px; /* adds space between buttons */
+}
+
+.friend-request-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.friend-request-content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Align to the start to keep names and buttons close */
+  width: 100%;
+}
+
+.request-details {
+  flex-grow: 1;
+  margin-right: 20px; /* Adds some space between the name and the buttons */
+}
+
+.request-actions {
+  display: flex;
+  gap: 8px; /* Space between Accept and Decline buttons */
+}
+
+.friend-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.friend-content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.friend-details {
+  flex-grow: 1;
+  margin-right: 20px; /* Adds some space between the name and the buttons */
+}
+
+.friend-actions {
+  display: flex;
+  gap: 8px; /* Space between Remove and Favorite buttons */
 }
 
