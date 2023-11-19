@@ -12,6 +12,7 @@ from .api import (
     profile,
     authentication,
     user,
+    friend,
 )
 from .api.coworking import status, reservation, ambassador
 from .api.admin import users as admin_users
@@ -34,6 +35,7 @@ app = FastAPI(
     openapi_tags=[
         profile.openapi_tags,
         user.openapi_tags,
+        friend.openapi_tags,
         organizations.openapi_tags,
         events.openapi_tags,
         reservation.openapi_tags,
@@ -50,6 +52,7 @@ feature_apis = [
     reservation,
     events,
     user,
+    friend,
     profile,
     organizations,
     health,

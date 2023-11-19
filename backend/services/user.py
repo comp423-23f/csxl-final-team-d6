@@ -8,10 +8,6 @@ from sqlalchemy import select, or_, func
 from sqlalchemy.orm import Session
 from ..database import db_session
 from ..models import User, UserDetails, Paginated, PaginationParams
-from ..models.user import (
-    FriendRequestResponse,
-    FriendStatus,
-)  # This line imports the models
 from typing import List
 
 from ..entities import UserEntity
@@ -169,22 +165,3 @@ class UserService:
         entity.update(user)
         self._session.commit()
         return entity.to_model()
-
-    def send_friend_request(
-        self, subject: User, target_user_id: int
-    ) -> FriendRequestResponse:
-        # Stubbed response
-        return FriendRequestResponse(
-            request_id=1,
-            requester_id=subject.id,  # type: ignore
-            requestee_id=target_user_id,
-            status="pending",
-        )
-
-    def get_friends_status(self, subject: User) -> List[FriendStatus]:
-        # Stubbed response
-        return [
-            FriendStatus(friend_id=2, checked_in=True, seat_number="A1"),
-            FriendStatus(friend_id=3, checked_in=False, seat_number=None),
-            # Add more stubbed friends status
-        ]
