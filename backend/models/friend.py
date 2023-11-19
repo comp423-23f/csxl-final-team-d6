@@ -18,6 +18,7 @@ class FriendRequest(BaseModel):
     sender_id: int
     receiver_id: int
     is_accepted: bool = False
+    pending: bool = True
     created_at: datetime | None = None
 
     class Config:
