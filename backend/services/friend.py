@@ -60,6 +60,7 @@ class FriendRequestService:
             )
 
         friend_request.is_accepted = True
+        friend_request.pending = False
         self._session.commit()
         return friend_request.to_model()
 
@@ -80,6 +81,7 @@ class FriendRequestService:
             )
 
         friend_request.is_accepted = False
+        friend_request.pending = False
         self._session.commit()
         return friend_request.to_model()
 
