@@ -16,6 +16,7 @@ interface User {
 
 interface Friend {
   id: number;
+  pid: number;
   first_name: string;
   last_name: string;
   isWorking: boolean;
@@ -26,8 +27,11 @@ interface Friend {
 // New interface for FriendRequest
 interface FriendRequest {
   id: number;
+  first_name: string;
+  last_name: string;
   sender_id: number;
   receiver_id: number;
+  receiver_pid: number;
   is_accepted: boolean;
   pending: true;
   created_at: string;
@@ -119,7 +123,14 @@ export class FriendsService {
     });
   }
 
-  sendFriendRequest(receiverId: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/friend-requests/${receiverId}`, {});
+  sendFriendRequest(
+    senderID: number,
+    receiverId: number,
+    receiverPID: number
+  ): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/friend-requests/${senderID}/${receiverId}/${receiverPID}`,
+      {}
+    );
   }
 }

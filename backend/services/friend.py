@@ -27,7 +27,9 @@ class FriendRequestService:
         """Initializes the `FriendRequestService` session"""
         self._session = session
 
-    def send_request(self, sender_id: int, receiver_id: int) -> FriendRequestModel:
+    def send_request(
+        self, sender_id: int, receiver_id: int, receiver_pid: int
+    ) -> FriendRequestModel:
         """
         Creates a friend request and adds it to the table.
 
@@ -38,7 +40,9 @@ class FriendRequestService:
         Returns:
             FriendRequestModel: The created friend request
         """
-        friend_request = FriendRequest(sender_id=sender_id, receiver_id=receiver_id)
+        friend_request = FriendRequest(
+            sender_id=sender_id, receiver_id=receiver_id, receiver_pid=receiver_pid
+        )
         self._session.add(friend_request)
         self._session.commit()
         return friend_request.to_model()

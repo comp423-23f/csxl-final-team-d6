@@ -11,9 +11,15 @@ openapi_tags = {
 }
 
 
-@api.post("/{receiver_id}", response_model=FriendRequestModel, tags=["Friend Requests"])
+@api.post(
+    "/{sender_id}/{receiver_id}/{receiver_pid}",
+    response_model=FriendRequestModel,
+    tags=["Friend Requests"],
+)
 def send_friend_request(
+    sender_id: int,
     receiver_id: int,
+    receiver_pid: int,
     subject: User = Depends(registered_user),
     friend_request_svc: FriendRequestService = Depends(),
 ):
@@ -24,7 +30,7 @@ def send_friend_request(
         raise HTTPException(status_code=400, detail="User ID is missing.")
 
     try:
-        return friend_request_svc.send_request(subject.id, receiver_id)
+        return friend_request_svc.send_request(sender_id, receiver_id, receiver_pid)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 

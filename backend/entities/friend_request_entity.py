@@ -15,7 +15,7 @@ class FriendRequest(EntityBase):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     sender_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
     receiver_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
-    receiver_pid: Mapped[int] = mapped_column(ForeignKey("users.pid"), nullable=True)
+    receiver_pid: Mapped[int] = mapped_column(ForeignKey("users.pid"), nullable=False)
     is_accepted: Mapped[bool] = mapped_column(Boolean, default=False)
 
     pending: Mapped[bool] = mapped_column(Boolean, default=True)
@@ -28,9 +28,7 @@ class FriendRequest(EntityBase):
     receiver_id: Mapped[int] = mapped_column(
         ForeignKey("user.id"), nullable=False
     )  # Adjusted to "user.id"
-    receiver_pid: Mapped[int] = mapped_column(
-        ForeignKey("user.pid"), nullable=False
-    )  # Adjusted to "user.id"
+    receiver_pid: Mapped[int] = mapped_column(ForeignKey("user.pid"), nullable=False)
 
     # Relationships
     sender: Mapped[UserEntity] = relationship("UserEntity", foreign_keys=[sender_id])
@@ -62,7 +60,7 @@ class FriendRequest(EntityBase):
             id=self.id,
             sender_id=self.sender_id,
             receiver_id=self.receiver_id,
-            receiver_pid=self.receiver_id,
+            receiver_pid=self.receiver_pid,
             is_accepted=self.is_accepted,
             pending=self.pending,
             created_at=self.created_at,
