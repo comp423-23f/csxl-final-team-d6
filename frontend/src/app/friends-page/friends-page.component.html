@@ -11,7 +11,7 @@
       <mat-list>
         <mat-list-item *ngFor="let friend of friends">
           <!-- Display friend's name, ID, and working status with a colon -->
-          {{ friend.name }} (ID: {{ friend.id }}):
+          {{ friend.first_name }} (ID: {{ friend.id }}):
           <span [class.working]="friend.isWorking">
             {{ friend.isWorking ? 'Working' : 'Not Working' }}
           </span>
@@ -37,7 +37,7 @@
           class="friend-request-item">
           <div class="friend-request-content">
             <span class="request-details">
-              {{ request.name }} (ID: {{ request.id }})
+              {{ request.sender_id }} (ID: {{ request.receiver_id }})
             </span>
             <div class="request-actions">
               <button mat-button (click)="acceptFriendRequest(request.id)">
@@ -74,7 +74,7 @@
 
     <mat-list *ngIf="searchResults.length > 0">
       <mat-list-item *ngFor="let result of searchResults">
-        {{ result.name }}
+        {{ result.first_name }} {{ result.last_name }} (ID: {{ result.id }})
         <button mat-button (click)="addFriendFromSearch(result)">Add</button>
       </mat-list-item>
     </mat-list>
@@ -88,7 +88,7 @@
         <mat-list-item *ngFor="let friend of friends" class="friend-item">
           <div class="friend-content">
             <span class="friend-details">
-              {{ friend.name }} (ID: {{ friend.id }})
+              {{ friend.first_name }} (ID: {{ friend.id }})
             </span>
             <div class="friend-actions">
               <button mat-button (click)="deleteFriend(friend.id)">
