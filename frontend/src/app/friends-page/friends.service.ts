@@ -41,7 +41,7 @@ interface FriendRequest {
   providedIn: 'root'
 })
 export class FriendsService {
-  private apiUrl = 'http://localhost:1560/api';
+  private apiUrl = 'https://team-d6-comp423-23f.apps.cloudapps.unc.edu/api';
 
   // Dummy data for friends
   private friends = [
