@@ -11,7 +11,7 @@
       <mat-list>
         <mat-list-item *ngFor="let friend of friends">
           <!-- Display friend's name, ID, and working status with a colon -->
-          {{ friend.name }} (ID: {{ friend.id }}):
+          {{ friend.first_name }} (ID: {{ friend.id }}):
           <span [class.working]="friend.isWorking">
             {{ friend.isWorking ? 'Working' : 'Not Working' }}
           </span>
@@ -31,24 +31,24 @@
       <mat-card-header>
         <mat-card-title>Pending Requests</mat-card-title>
       </mat-card-header>
-      <mat-list>
-        <mat-list-item
-          *ngFor="let request of friendRequests"
-          class="friend-request-item">
-          <div class="friend-request-content">
-            <span class="request-details">
-              {{ request.name }} (ID: {{ request.id }})
-            </span>
-            <div class="request-actions">
-              <button mat-button (click)="acceptFriendRequest(request.id)">
-                Accept
-              </button>
-              <button mat-button (click)="declineFriendRequest(request.id)">
-                Decline
-              </button>
+      <mat-list *ngIf="friendRequests.length > 0">
+        <ng-container *ngFor="let request of friendRequests">
+          <mat-list-item class="friend-request-item" *ngIf="request.pending">
+            <div class="friend-request-content">
+              <span class="request-details">
+                {{ request.sender_id }} (ID: {{ request.receiver_id }})
+              </span>
+              <div class="request-actions">
+                <button mat-button (click)="acceptFriendRequest(request.id)">
+                  Accept
+                </button>
+                <button mat-button (click)="declineFriendRequest(request.id)">
+                  Decline
+                </button>
+              </div>
             </div>
-          </div>
-        </mat-list-item>
+          </mat-list-item>
+        </ng-container>
       </mat-list>
     </div>
   </mat-card-content>
@@ -74,7 +74,7 @@
 
     <mat-list *ngIf="searchResults.length > 0">
       <mat-list-item *ngFor="let result of searchResults">
-        {{ result.name }}
+        {{ result.first_name }} {{ result.last_name }} (ID: {{ result.id }})
         <button mat-button (click)="addFriendFromSearch(result)">Add</button>
       </mat-list-item>
     </mat-list>
@@ -85,21 +85,20 @@
         <mat-card-title>Friends List</mat-card-title>
       </mat-card-header>
       <mat-list>
-        <mat-list-item *ngFor="let friend of friends" class="friend-item">
-          <div class="friend-content">
-            <span class="friend-details">
-              {{ friend.name }} (ID: {{ friend.id }})
-            </span>
-            <div class="friend-actions">
-              <button mat-button (click)="deleteFriend(friend.id)">
-                Remove
-              </button>
-              <button mat-button (click)="toggleFavorite(friend.id)">
-                {{ friend.isFavorite ? 'Unfavorite' : 'Favorite' }}
-              </button>
+        <ng-container *ngFor="let friend of friendRequests">
+          <mat-list-item class="friend-item" *ngIf="friend.is_accepted">
+            <div class="friend-content">
+              <span class="friend-details">
+                {{ friend.first_name }} (ID: {{ friend.id }})
+              </span>
+              <div class="friend-actions">
+                <button mat-button (click)="deleteFriend(friend.id)">
+                  Remove
+                </button>
+              </div>
             </div>
-          </div>
-        </mat-list-item>
+          </mat-list-item>
+        </ng-container>
       </mat-list>
     </div>
   </mat-card-content>

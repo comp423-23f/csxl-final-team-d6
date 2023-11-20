@@ -1,39 +1,65 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+interface User {
+  pid: number;
+  onyen: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  pronouns: string;
+  github: string;
+  github_id: number | null;
+  github_avatar: string | null;
+}
 
 interface Friend {
   id: number;
-  name: string;
+  pid: number;
+  first_name: string;
+  last_name: string;
   isWorking: boolean;
   isFavorite: boolean;
+  pending?: boolean;
 }
 
 // New interface for FriendRequest
 interface FriendRequest {
   id: number;
-  name: string;
+  first_name: string;
+  last_name: string;
+  sender_id: number;
+  receiver_id: number;
+  receiver_pid: number;
+  is_accepted: boolean;
+  pending: true;
+  created_at: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class FriendsService {
+  private apiUrl = 'http://localhost:1560/api';
+
   // Dummy data for friends
   private friends = [
     { id: 123456789, name: 'John Doe', isWorking: false, isFavorite: false },
     { id: 987654321, name: 'Jane Smith', isWorking: false, isFavorite: false }
   ];
 
-  // Dummy data for friend requests
-  private friendRequests: FriendRequest[] = [
-    { id: 123456788, name: 'Spongebob' },
-    { id: 887654321, name: 'Patrick' }
-  ];
+  constructor(private http: HttpClient) {}
 
-  constructor() {}
+  // Method to get user profile details
+  getProfile(): Observable<any> {
+    // Replace 'any' with a more specific type if available
+    return this.http.get<User[]>(`${this.apiUrl}/profile`);
+  }
 
   // Fetch all friends
-  getAllFriends() {
-    return this.friends;
+  getAllFriends(): Observable<Friend[]> {
+    return this.http.get<Friend[]>(`${this.apiUrl}/user`);
   }
 
   // Add a new friend
@@ -71,29 +97,40 @@ export class FriendsService {
 
   // New method to fetch friend requests
   getFriendRequests() {
-    return this.friendRequests;
+    return this.http.get<FriendRequest[]>(`${this.apiUrl}/friend-requests/`);
   }
 
   // New method to accept a friend request
-  acceptFriendRequest(id: number) {
-    const requestIndex = this.friendRequests.findIndex((req) => req.id === id);
-    if (requestIndex > -1) {
-      // Assuming accepting a friend request adds them to your friends list
-      const request = this.friendRequests[requestIndex];
-      this.addFriend(request.id, request.name);
-      this.friendRequests.splice(requestIndex, 1);
-    }
+  acceptFriendRequest(request_id: number) {
+    return this.http.put<FriendRequest>(
+      `${this.apiUrl}/friend-requests/accept/${request_id}`,
+      {}
+    );
   }
 
   // New method to decline a friend request
-  declineFriendRequest(id: number) {
-    this.friendRequests = this.friendRequests.filter((req) => req.id !== id);
+  declineFriendRequest(request_id: number) {
+    return this.http.put<FriendRequest>(
+      `${this.apiUrl}/friend-requests/reject/${request_id}`,
+      {}
+    );
   }
 
   // Method to search for friends by name
-  searchFriends(name: string): Friend[] {
-    return this.friends.filter((friend) =>
-      friend.name.toLowerCase().includes(name.toLowerCase())
+  searchFriends(query: string): Observable<Friend[]> {
+    return this.http.get<Friend[]>(`${this.apiUrl}/user`, {
+      params: { q: query }
+    });
+  }
+
+  sendFriendRequest(
+    senderID: number,
+    receiverId: number,
+    receiverPID: number
+  ): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/friend-requests/${senderID}/${receiverId}/${receiverPID}`,
+      {}
     );
   }
 }
