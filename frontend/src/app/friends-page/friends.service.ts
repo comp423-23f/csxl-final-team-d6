@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 interface User {
+  id: number;
   pid: number;
   onyen: string;
   first_name: string;
@@ -14,26 +15,10 @@ interface User {
   github_avatar: string | null;
 }
 
-interface Friend {
-  id: number;
-  pid: number;
-  first_name: string;
-  last_name: string;
-  isWorking: boolean;
-  isFavorite: boolean;
-  pending?: boolean;
-}
-
-// New interface for FriendRequest
 interface FriendRequest {
   id: number;
-  first_name: string;
-  last_name: string;
   sender_id: number;
   receiver_id: number;
-  receiver_pid: number;
-  is_accepted: boolean;
-  pending: true;
   created_at: string;
 }
 
@@ -41,14 +26,10 @@ interface FriendRequest {
   providedIn: 'root'
 })
 export class FriendsService {
-  private apiUrl = 'https://team-d6-comp423-23f.apps.cloudapps.unc.edu/api';
-
-  // Dummy data for friends
-  private friends = [
-    { id: 123456789, name: 'John Doe', isWorking: false, isFavorite: false },
-    { id: 987654321, name: 'Jane Smith', isWorking: false, isFavorite: false }
-  ];
-
+  // https://team-d6-comp423-23f.apps.cloudapps.unc.edu/api
+  // http://localhost:1560/api
+  private apiUrl = 'http://localhost:1560/api';
+  
   constructor(private http: HttpClient) {}
 
   // Method to get user profile details
@@ -57,80 +38,60 @@ export class FriendsService {
     return this.http.get<User[]>(`${this.apiUrl}/profile`);
   }
 
-  // Fetch all friends
-  getAllFriends(): Observable<Friend[]> {
-    return this.http.get<Friend[]>(`${this.apiUrl}/user`);
+  getUserInfo(friendId: number): Observable<User> {
+    return this.http.get<User>(
+      `${this.apiUrl}/friends/friend-info/${friendId}`
+    );
   }
 
-  // Add a new friend
-  addFriend(id: number, name: string) {
-    alert(`${name} has been added as a friend!`);
-    let newId = this.friends.length + 1;
-    this.friends.push({
-      id,
-      name,
-      isWorking: false,
-      isFavorite: false
-    });
+  getAllFriends(userId: number): Observable<User[]> {
+    return this.http.get<User[]>(
+      `${this.apiUrl}/friends/friends-list/${userId}`
+    );
   }
 
-  // Update friend by id
-  updateFriend(id: number, name: string) {
-    alert(`Updating friend with id ${id} to name ${name}`);
-    const friend = this.friends.find((f) => f.id === id);
-    if (friend) {
-      friend.name = name;
-    }
+  getIncomingFriendRequests(userId: number): Observable<FriendRequest[]> {
+    return this.http.get<FriendRequest[]>(
+      `${this.apiUrl}/friends/incoming-requests/${userId}`
+    );
   }
 
-  // Delete friend by id
-  deleteFriend(id: number) {
-    this.friends = this.friends.filter((f) => f.id !== id);
+  getOutgoingFriendRequests(userId: number): Observable<FriendRequest[]> {
+    return this.http.get<FriendRequest[]>(
+      `${this.apiUrl}/friends/outgoing-requests/${userId}`
+    );
   }
 
-  toggleWorkingStatus(id: number): void {
-    const friend = this.friends.find((f) => f.id === id);
-    if (friend) {
-      friend.isWorking = !friend.isWorking;
-    }
-  }
-
-  // New method to fetch friend requests
-  getFriendRequests() {
-    return this.http.get<FriendRequest[]>(`${this.apiUrl}/friend-requests/`);
-  }
-
-  // New method to accept a friend request
-  acceptFriendRequest(request_id: number) {
-    return this.http.put<FriendRequest>(
-      `${this.apiUrl}/friend-requests/accept/${request_id}`,
+  acceptFriendRequest(senderId: number, receiverId: number): Observable<any> {
+    return this.http.put<any>(
+      `${this.apiUrl}/friends/accept/${senderId}/${receiverId}`,
       {}
     );
   }
 
-  // New method to decline a friend request
-  declineFriendRequest(request_id: number) {
-    return this.http.put<FriendRequest>(
-      `${this.apiUrl}/friend-requests/reject/${request_id}`,
+  rejectFriendRequest(senderId: number, receiverId: number): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/friends/reject/${senderId}/${receiverId}`
+    );
+  }
+
+  sendFriendRequest(senderId: number, receiverId: number): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/friends/${senderId}/${receiverId}`,
       {}
     );
   }
 
-  // Method to search for friends by name
-  searchFriends(query: string): Observable<Friend[]> {
-    return this.http.get<Friend[]>(`${this.apiUrl}/user`, {
+  removeFriend(userId: number, friendId: number): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/friends/remove-friend/${userId}/${friendId}`,
+      {}
+    );
+  }
+
+  searchFriends(query: string): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/user`, {
       params: { q: query }
     });
-  }
-
-  sendFriendRequest(
-    senderID: number,
-    receiverId: number,
-    receiverPID: number
-  ): Observable<any> {
-    return this.http.post(
-      `${this.apiUrl}/friend-requests/${senderID}/${receiverId}/${receiverPID}`,
-      {}
-    );
   }
 }

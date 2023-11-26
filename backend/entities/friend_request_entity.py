@@ -5,7 +5,7 @@ from datetime import datetime
 from .user_entity import UserEntity
 from ..models.friend import (
     FriendRequest as FriendRequestModel,
-)  # Import your Pydantic model
+)
 
 
 class FriendRequest(EntityBase):
@@ -15,11 +15,6 @@ class FriendRequest(EntityBase):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     sender_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
     receiver_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
-    receiver_pid: Mapped[int] = mapped_column(ForeignKey("users.pid"), nullable=False)
-    is_accepted: Mapped[bool] = mapped_column(Boolean, default=False)
-
-    pending: Mapped[bool] = mapped_column(Boolean, default=True)
-
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     sender_id: Mapped[int] = mapped_column(
@@ -28,15 +23,11 @@ class FriendRequest(EntityBase):
     receiver_id: Mapped[int] = mapped_column(
         ForeignKey("user.id"), nullable=False
     )  # Adjusted to "user.id"
-    receiver_pid: Mapped[int] = mapped_column(ForeignKey("user.pid"), nullable=False)
 
     # Relationships
     sender: Mapped[UserEntity] = relationship("UserEntity", foreign_keys=[sender_id])
     receiver: Mapped[UserEntity] = relationship(
         "UserEntity", foreign_keys=[receiver_id]
-    )
-    receiver_user: Mapped[UserEntity] = relationship(
-        "UserEntity", foreign_keys=[receiver_pid]
     )
 
     @classmethod
@@ -47,9 +38,6 @@ class FriendRequest(EntityBase):
         return cls(
             sender_id=model.sender_id,
             receiver_id=model.receiver_id,
-            receiver_pid=model.receiver_pid,
-            is_accepted=model.is_accepted,
-            pending=model.pending,
         )
 
     def to_model(self) -> FriendRequestModel:
@@ -60,8 +48,5 @@ class FriendRequest(EntityBase):
             id=self.id,
             sender_id=self.sender_id,
             receiver_id=self.receiver_id,
-            receiver_pid=self.receiver_pid,
-            is_accepted=self.is_accepted,
-            pending=self.pending,
             created_at=self.created_at,
         )
