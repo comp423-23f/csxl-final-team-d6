@@ -12,9 +12,6 @@
         <mat-list-item *ngFor="let friend of friends">
           <!-- Display friend's name, ID, and working status with a colon -->
           {{ friend.first_name }} (ID: {{ friend.id }}):
-          <span [class.working]="friend.isWorking">
-            {{ friend.isWorking ? 'Working' : 'Not Working' }}
-          </span>
         </mat-list-item>
       </mat-list>
     </div>
@@ -31,24 +28,57 @@
       <mat-card-header>
         <mat-card-title>Pending Requests</mat-card-title>
       </mat-card-header>
-      <mat-list *ngIf="friendRequests.length > 0">
-        <ng-container *ngFor="let request of friendRequests">
-          <mat-list-item class="friend-request-item" *ngIf="request.pending">
+      <mat-list *ngIf="incomingFriendRequests.length > 0">
+        <ng-container *ngFor="let request of incomingFriendRequests">
+          <mat-list-item class="friend-request-item">
             <div class="friend-request-content">
               <span class="request-details">
-                {{ request.sender_id }} (ID: {{ request.receiver_id }})
+                {{ request.first_name }} (ID: {{ request.id }})
               </span>
               <div class="request-actions">
                 <button mat-button (click)="acceptFriendRequest(request.id)">
                   Accept
                 </button>
-                <button mat-button (click)="declineFriendRequest(request.id)">
+                <button mat-button (click)="rejectFriendRequest(request.id)">
                   Decline
                 </button>
               </div>
             </div>
           </mat-list-item>
         </ng-container>
+      </mat-list>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="content" appearance="outlined">
+  <mat-card-content>
+    <!-- Header for Outgoing Friend Requests -->
+    <mat-card-subtitle>Outgoing Friend Requests</mat-card-subtitle>
+
+    <!-- Section for displaying outgoing requests -->
+    <div>
+      <mat-card-header>
+        <mat-card-title>Outgoing Requests</mat-card-title>
+      </mat-card-header>
+      <mat-list *ngIf="outgoingFriendRequests.length > 0">
+        <ng-container *ngFor="let request of outgoingFriendRequests">
+          <mat-list-item class="friend-request-item">
+            <div class="friend-request-content">
+              <span class="request-details">
+                {{ request.first_name }} (ID: {{ request.id }})
+              </span>
+              <div class="request-actions">
+                <button mat-button (click)="cancelFriendRequest(request.id)">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </mat-list-item>
+        </ng-container>
+      </mat-list>
+      <mat-list *ngIf="outgoingFriendRequests.length === 0">
+        <mat-list-item>No outgoing friend requests.</mat-list-item>
       </mat-list>
     </div>
   </mat-card-content>
@@ -75,7 +105,7 @@
     <mat-list *ngIf="searchResults.length > 0">
       <mat-list-item *ngFor="let result of searchResults">
         {{ result.first_name }} {{ result.last_name }} (ID: {{ result.id }})
-        <button mat-button (click)="addFriendFromSearch(result)">Add</button>
+        <button mat-button (click)="sendFriendRequest(result)">Add</button>
       </mat-list-item>
     </mat-list>
 
@@ -85,14 +115,14 @@
         <mat-card-title>Friends List</mat-card-title>
       </mat-card-header>
       <mat-list>
-        <ng-container *ngFor="let friend of friendRequests">
-          <mat-list-item class="friend-item" *ngIf="friend.is_accepted">
+        <ng-container *ngFor="let friend of friends">
+          <mat-list-item class="friend-item">
             <div class="friend-content">
               <span class="friend-details">
                 {{ friend.first_name }} (ID: {{ friend.id }})
               </span>
               <div class="friend-actions">
-                <button mat-button (click)="deleteFriend(friend.id)">
+                <button mat-button (click)="removeFriend(friend.id)">
                   Remove
                 </button>
               </div>
