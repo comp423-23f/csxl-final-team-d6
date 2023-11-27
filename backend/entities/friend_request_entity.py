@@ -5,7 +5,7 @@ from datetime import datetime
 from .user_entity import UserEntity
 from ..models.friend import (
     FriendRequest as FriendRequestModel,
-)  # Import your Pydantic model
+)
 
 
 class FriendRequest(EntityBase):
@@ -15,7 +15,6 @@ class FriendRequest(EntityBase):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     sender_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
     receiver_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
-    is_accepted: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     sender_id: Mapped[int] = mapped_column(
@@ -39,7 +38,6 @@ class FriendRequest(EntityBase):
         return cls(
             sender_id=model.sender_id,
             receiver_id=model.receiver_id,
-            is_accepted=model.is_accepted,
         )
 
     def to_model(self) -> FriendRequestModel:
@@ -50,6 +48,5 @@ class FriendRequest(EntityBase):
             id=self.id,
             sender_id=self.sender_id,
             receiver_id=self.receiver_id,
-            is_accepted=self.is_accepted,
             created_at=self.created_at,
         )
