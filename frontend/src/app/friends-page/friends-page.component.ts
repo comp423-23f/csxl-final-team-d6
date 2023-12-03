@@ -12,6 +12,7 @@ interface User {
   github: string;
   github_id: number | null;
   github_avatar: string | null;
+  isWorking?: boolean;
 }
 
 @Component({
@@ -55,15 +56,24 @@ export class FriendsPageComponent implements OnInit {
 
   loadFriends() {
     if (this.currentProfile && this.currentProfile.id) {
-      this.friends = [];
       this.friendsService.getAllFriends(this.currentProfile.id).subscribe(
         (friends) => {
+          friends.forEach((friend) => {
+            this.friendsService.getWorkingStatus(friend.id).subscribe(
+              (isWorking) => {
+                friend.isWorking = isWorking;
+              },
+              (error) =>
+                console.error(
+                  `Error fetching working status for user ${friend.id}:`,
+                  error
+                )
+            );
+          });
           this.friends = friends;
           console.log('Friends loaded:', this.friends);
         },
-        (error) => {
-          console.error('Error fetching friends:', error);
-        }
+        (error) => console.error('Error fetching friends:', error)
       );
     } else {
       console.error('Current user profile is not loaded. Cannot load friends.');

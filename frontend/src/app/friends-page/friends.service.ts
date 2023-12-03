@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 
 interface User {
+  isWorking: boolean;
   id: number;
   pid: number;
   onyen: string;
@@ -28,7 +29,7 @@ interface FriendRequest {
 export class FriendsService {
   // https://team-d6-comp423-23f.apps.cloudapps.unc.edu/api
   // http://localhost:1560/api
-  private apiUrl = 'https://team-d6-comp423-23f.apps.cloudapps.unc.edu/api';
+  private apiUrl = 'http://localhost:1560/api';
 
   constructor(private http: HttpClient) {}
 
@@ -93,5 +94,24 @@ export class FriendsService {
     return this.http.get<User[]>(`${this.apiUrl}/user`, {
       params: { q: query }
     });
+  }
+
+  getWorkingStatus(userId: number): Observable<boolean> {
+    return this.http
+      .get<any>(`${this.apiUrl}/coworking/reservation/${userId}`)
+      .pipe(
+        map((reservation) => {
+          const now = new Date();
+          return (
+            reservation.state === 'ACTIVE' &&
+            new Date(reservation.start) <= now &&
+            new Date(reservation.end) >= now
+          );
+        }),
+        catchError((error) => {
+          console.error('Error fetching working status:', error);
+          return of(false);
+        })
+      );
   }
 }
