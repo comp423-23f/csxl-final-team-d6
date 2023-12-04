@@ -21,6 +21,7 @@ from .user_role_table import user_role_table
 from .organization_entity import OrganizationEntity
 from .event_entity import EventEntity
 from .friend_request_entity import FriendRequest
+from .friendship_entity import Friendship
 
 __authors__ = ["Kris Jordan"]
 __copyright__ = "Copyright 2023"

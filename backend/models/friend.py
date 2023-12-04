@@ -17,10 +17,22 @@ class FriendRequest(BaseModel):
     id: int | None = None
     sender_id: int
     receiver_id: int
-    is_accepted: bool = False
-    pending: bool = True
-
     created_at: datetime | None = None
+
+    class Config:
+        orm_mode = True
+
+
+class FriendshipModel(BaseModel):
+    """
+    Pydantic model to represent a `Friendship`.
+
+    This model is based on the `Friendship` entity, which defines the shape
+    of the `friendships` table in the database.
+    """
+
+    user_id: int
+    friend_id: int
 
     class Config:
         orm_mode = True

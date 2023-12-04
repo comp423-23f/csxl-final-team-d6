@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FriendsService } from './friends.service';
 
-interface Friend {
+interface User {
   id: number;
-  name: string;
-  isWorking: boolean;
-  isFavorite?: boolean; // Optional property to track favorite status
-}
-
-interface FriendRequest {
-  id: number;
-  name: string;
+  pid: number;
+  onyen: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  pronouns: string;
+  github: string;
+  github_id: number | null;
+  github_avatar: string | null;
 }
 
 @Component({
@@ -19,90 +20,233 @@ interface FriendRequest {
   styleUrls: ['./friends-page.component.css']
 })
 export class FriendsPageComponent implements OnInit {
-  friends: Friend[] = [];
-  friendRequests: FriendRequest[] = []; // Array to store pending friend requests
-  newFriendId: number | null = null;
-  newFriendName: string = '';
-
+  currentProfile: User | null = null;
+  friends: User[] = [];
+  incomingFriendRequests: User[] = [];
+  outgoingFriendRequests: User[] = [];
   searchQuery: string = '';
-  searchResults: Friend[] = [];
+  searchResults: User[] = [];
   showSearchBar: boolean = false;
 
   constructor(private friendsService: FriendsService) {}
 
   ngOnInit() {
-    this.loadAllFriends();
-    this.loadFriendRequests(); // Load friend requests on initialization
-  }
-
-  loadAllFriends() {
-    this.friends = this.friendsService.getAllFriends();
+    this.loadCurrentUserProfile();
   }
 
   toggleSearchBar() {
     this.showSearchBar = !this.showSearchBar;
   }
 
-  loadFriendRequests() {
-    // Assume that your FriendsService has a method to get friend requests
-    this.friendRequests = this.friendsService.getFriendRequests();
+  loadCurrentUserProfile() {
+    this.friendsService.getProfile().subscribe(
+      (profile: User) => {
+        this.currentProfile = profile;
+        console.log('Received user profile:', profile); // Log the received profile data
+        this.loadFriends();
+        this.loadIncomingFriendRequests();
+        this.loadOutgoingFriendRequests();
+      },
+      (error) => {
+        console.error('Error fetching current user profile:', error);
+      }
+    );
   }
 
-  addFriend() {
-    if (this.newFriendId !== null) {
-      this.friendsService.addFriend(this.newFriendId, this.newFriendName);
-      this.newFriendId = null;
-      this.newFriendName = '';
-      this.loadAllFriends();
+  loadFriends() {
+    if (this.currentProfile && this.currentProfile.id) {
+      this.friends = [];
+      this.friendsService.getAllFriends(this.currentProfile.id).subscribe(
+        (friends) => {
+          this.friends = friends;
+          console.log('Friends loaded:', this.friends);
+        },
+        (error) => {
+          console.error('Error fetching friends:', error);
+        }
+      );
+    } else {
+      console.error('Current user profile is not loaded. Cannot load friends.');
     }
   }
 
-  deleteFriend(id: number) {
-    const friend = this.friends.find((f) => f.id === id);
-    if (friend) {
-      alert(`Removing ${friend.name} from your friends list`);
-      this.friendsService.deleteFriend(id);
-      this.loadAllFriends();
+  loadIncomingFriendRequests() {
+    if (this.currentProfile && this.currentProfile.id !== undefined) {
+      const userId = this.currentProfile.id;
+      this.incomingFriendRequests = []; // Clear existing requests
+      this.friendsService.getIncomingFriendRequests(userId).subscribe(
+        (requests) => {
+          requests.forEach((request) => {
+            this.friendsService.getUserInfo(request.sender_id).subscribe(
+              (userInfo) => {
+                this.incomingFriendRequests.push(userInfo);
+              },
+              (error) => console.error('Error fetching user info:', error)
+            );
+          });
+        },
+        (error) =>
+          console.error('Error fetching incoming friend requests:', error)
+      );
+    } else {
+      console.error(
+        'Current user profile is not loaded or user ID is undefined. Cannot load incoming friend requests.'
+      );
     }
   }
 
-  toggleWorkingStatus(id: number) {
-    this.friendsService.toggleWorkingStatus(id);
-    this.loadAllFriends();
+  loadOutgoingFriendRequests() {
+    if (this.currentProfile && this.currentProfile.id !== undefined) {
+      const userId = this.currentProfile.id;
+      this.outgoingFriendRequests = [];
+      this.friendsService.getOutgoingFriendRequests(userId).subscribe(
+        (requests) => {
+          requests.forEach((request) => {
+            this.friendsService.getUserInfo(request.receiver_id).subscribe(
+              (userInfo) => {
+                this.outgoingFriendRequests.push(userInfo);
+              },
+              (error) => console.error('Error fetching user info:', error)
+            );
+          });
+        },
+        (error) =>
+          console.error('Error fetching incoming friend requests:', error)
+      );
+    } else {
+      console.error(
+        'Current user profile is not loaded or user ID is undefined. Cannot load incoming friend requests.'
+      );
+    }
   }
 
-  acceptFriendRequest(id: number) {
-    // Method to accept a friend request
-    this.friendsService.acceptFriendRequest(id);
-    this.loadFriendRequests();
+  acceptFriendRequest(sender_id: number) {
+    if (this.currentProfile && this.currentProfile.id !== undefined) {
+      this.friendsService
+        .acceptFriendRequest(sender_id, this.currentProfile.id)
+        .subscribe({
+          next: (response) => {
+            console.log('Friend request accepted:', response);
+            this.loadFriends(); // Reload friends list
+            this.loadIncomingFriendRequests(); // Reload incoming requests
+          },
+          error: (error) => {
+            console.error('Error accepting friend request:', error);
+          }
+        });
+    } else {
+      console.error(
+        'Current user profile is not loaded or user ID is undefined.'
+      );
+    }
   }
 
-  declineFriendRequest(id: number) {
-    // Method to decline a friend request
-    this.friendsService.declineFriendRequest(id);
-    this.loadFriendRequests();
+  rejectFriendRequest(sender_id: number) {
+    if (this.currentProfile && this.currentProfile.id !== undefined) {
+      this.friendsService
+        .rejectFriendRequest(sender_id, this.currentProfile.id)
+        .subscribe({
+          next: (response) => {
+            console.log('Friend request rejected:', response);
+            this.loadIncomingFriendRequests(); // Reload incoming requests
+          },
+          error: (error) => {
+            console.error('Error rejecting friend request:', error);
+          }
+        });
+    } else {
+      console.error(
+        'Current user profile is not loaded or user ID is undefined.'
+      );
+    }
   }
 
-  toggleFavorite(id: number) {
-    const friend = this.friends.find((f) => f.id === id);
-    if (friend) {
-      friend.isFavorite = !friend.isFavorite; // Toggle the isFavorite property
+  cancelFriendRequest(receiver_id: number) {
+    if (this.currentProfile && this.currentProfile.id !== undefined) {
+      this.friendsService
+        .rejectFriendRequest(this.currentProfile.id, receiver_id)
+        .subscribe({
+          next: (response) => {
+            console.log('Friend request canceled:', response);
+            this.loadOutgoingFriendRequests(); // Reload incoming requests
+          },
+          error: (error) => {
+            console.error('Error canceling friend request:', error);
+          }
+        });
+    } else {
+      console.error(
+        'Current user profile is not loaded or user ID is undefined.'
+      );
+    }
+  }
+
+  sendFriendRequest(receiverUser: User) {
+    if (this.currentProfile && this.currentProfile.id !== undefined) {
+      this.friendsService
+        .sendFriendRequest(this.currentProfile.id, receiverUser.id)
+        .subscribe({
+          next: (response) => {
+            if (response.id === -1) {
+              console.log('Friendship automatically created');
+              this.loadFriends();
+              this.loadIncomingFriendRequests();
+            } else {
+              console.log('Friend request sent:', response);
+              this.loadOutgoingFriendRequests();
+            }
+          },
+          error: (error) => {
+            console.error('Error sending friend request:', error);
+          }
+        });
+    } else {
+      console.error(
+        'Current user profile is not loaded or user ID is undefined.'
+      );
+    }
+  }
+
+  removeFriend(friendId: number) {
+    if (this.currentProfile && this.currentProfile.id !== undefined) {
+      this.friendsService
+        .removeFriend(this.currentProfile.id, friendId)
+        .subscribe({
+          next: (response) => {
+            console.log('Friend removed:', response);
+            this.loadFriends();
+          },
+          error: (error) => {
+            console.error('Error removing friend:', error);
+          }
+        });
+    } else {
+      console.error(
+        'Current user profile is not loaded or user ID is undefined.'
+      );
     }
   }
 
   searchFriends() {
     if (this.searchQuery) {
-      this.searchResults = this.friendsService.searchFriends(this.searchQuery);
+      this.friendsService.searchFriends(this.searchQuery).subscribe(
+        (results) => {
+          // Filter out the current user, existing friends, and users with outgoing requests
+          this.searchResults = results.filter(
+            (user) =>
+              user.id !== this.currentProfile?.id &&
+              !this.friends.some((friend) => friend.id === user.id) &&
+              !this.outgoingFriendRequests.some(
+                (request) => request.id === user.id
+              )
+          );
+        },
+        (error) => {
+          console.error('Error searching for friends:', error);
+        }
+      );
     } else {
       this.searchResults = [];
     }
-  }
-
-  addFriendFromSearch(friend: Friend) {
-    this.friendsService.addFriend(friend.id, friend.name);
-    // Optionally, clear search results
-    this.searchQuery = '';
-    this.searchResults = [];
-    this.loadAllFriends();
   }
 }
