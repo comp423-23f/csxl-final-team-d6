@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of } from 'rxjs';
 
 interface User {
-  isWorking: boolean;
+  is_working: boolean;
   id: number;
   pid: number;
   onyen: string;

@@ -12,7 +12,7 @@ interface User {
   github: string;
   github_id: number | null;
   github_avatar: string | null;
-  isWorking?: boolean;
+  is_working?: boolean;
 }
 
 @Component({
@@ -58,10 +58,13 @@ export class FriendsPageComponent implements OnInit {
     if (this.currentProfile && this.currentProfile.id) {
       this.friendsService.getAllFriends(this.currentProfile.id).subscribe(
         (friends) => {
-          friends.forEach((friend) => {
+          // Process each friend to fetch their working status
+          friends.forEach((friend, index) => {
             this.friendsService.getWorkingStatus(friend.id).subscribe(
-              (isWorking) => {
-                friend.isWorking = isWorking;
+              (is_working) => {
+                friend.is_working = is_working;
+                // Update the friend in the friends array
+                this.friends[index] = friend;
               },
               (error) =>
                 console.error(
@@ -70,7 +73,7 @@ export class FriendsPageComponent implements OnInit {
                 )
             );
           });
-          this.friends = friends;
+          this.friends = friends; // Assign the initially fetched friends list
           console.log('Friends loaded:', this.friends);
         },
         (error) => console.error('Error fetching friends:', error)

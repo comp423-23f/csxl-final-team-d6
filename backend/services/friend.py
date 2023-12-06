@@ -15,6 +15,7 @@ from ..entities import FriendRequest
 from ..entities import Friendship
 from .exceptions import ResourceNotFoundException
 from ..entities import UserEntity
+from backend.services.coworking.status import StatusService
 
 __authors__ = ["Your Name", "Other Contributors"]
 __copyright__ = "Copyright 2023"
@@ -211,7 +212,21 @@ class FriendRequestService:
             select(UserEntity).where(UserEntity.id.in_(friend_ids))
         ).all()
 
-        # Convert to UserModels (assuming you have a method like to_model in UserEntity)
+        status_service = StatusService()
+
+        for friend in friends:
+            friend_user_model = friend.to_model()
+
+            coworking_status = status_service.get_coworking_status(friend_user_model)
+
+            is_working_status = any(
+                reservation.state == "CONFIRMED"
+                for reservation in coworking_status.my_reservations
+            )
+
+            friend_user_model.is_working = is_working_status
+
+        # Convert to UserModels
         return [friend.to_model() for friend in friends]
 
     def remove_friend(self, user_id: int, friend_id: int) -> None:
