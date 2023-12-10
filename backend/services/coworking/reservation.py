@@ -670,7 +670,7 @@ class ReservationService:
                 available_seats.append(seat)
         return available_seats
 
-    def is_user_checked_in(self, reservation_id: int) -> bool:
+    def is_user_checked_in(self, reservation_id: int) -> dict:
         reservation: ReservationEntity | None = self._session.get(
             ReservationEntity, reservation_id
         )
@@ -679,4 +679,25 @@ class ReservationService:
                 f"No reservation with an ID of {reservation_id} found."
             )
 
-        return reservation.state == ReservationState.CHECKED_IN
+        reservation_details = {
+            "is_checked_in": reservation.state == ReservationState.CHECKED_IN,
+            "seat_details": None,
+        }
+
+        # If there are seats associated with the reservation and the user is checked in, get the seat details
+        if reservation.seats and reservation_details["is_checked_in"]:
+            # Assuming each reservation is for a single seat, but adjust if needed
+            seat = reservation.seats[0]
+            reservation_details["seat_details"] = {
+                "id": seat.id,
+                "title": seat.title,
+                "shorthand": seat.shorthand,
+                "reservable": seat.reservable,
+                "has_monitor": seat.has_monitor,
+                "sit_stand": seat.sit_stand,
+                "position": {"x": seat.x, "y": seat.y},
+                "room_id": seat.room_id,
+                # Add other relevant seat details here
+            }
+
+        return reservation_details

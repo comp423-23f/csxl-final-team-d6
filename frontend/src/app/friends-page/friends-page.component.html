@@ -1,19 +1,23 @@
 <mat-card class="content" appearance="outlined">
   <mat-card-content>
-    <!-- Header for Coworking Status -->
     <mat-card-subtitle>Coworking Status</mat-card-subtitle>
-
-    <!-- Section to toggle working status -->
     <div>
       <mat-card-header>
         <mat-card-title>Working Status</mat-card-title>
       </mat-card-header>
       <mat-list>
         <mat-list-item *ngFor="let friend of friends">
-          <!-- Display friend's name, ID, and working status with a colon -->
           {{ friend.first_name }} (ID: {{ friend.id }}):
-          <span [class.cheked-in]="friend.isWorking">
+          <span [class.checked-in]="friend.isWorking">
             {{ friend.isWorking ? 'Checked In' : 'Not Checked In' }}
+            <!-- Display Seat Details if Checked In -->
+            <ng-container *ngIf="friend.isWorking && friend.seatDetails">
+              <div>
+                Seat: {{ friend.seatDetails.title }} ({{
+                  friend.seatDetails.shorthand
+                }})
+              </div>
+            </ng-container>
           </span>
         </mat-list-item>
       </mat-list>

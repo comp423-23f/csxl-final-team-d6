@@ -71,5 +71,5 @@ def get_check_in_status(
     id: int,
     subject: User = Depends(registered_user),
     reservation_svc: ReservationService = Depends(),
-) -> bool:
+) -> dict:
     return reservation_svc.is_user_checked_in(id)

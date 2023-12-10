@@ -2,8 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of } from 'rxjs';
 
+interface SeatDetails {
+  title: string;
+  shorthand: string;
+}
+
 interface User {
-  isWorking: boolean;
   id: number;
   pid: number;
   onyen: string;
@@ -14,6 +18,9 @@ interface User {
   github: string;
   github_id: number | null;
   github_avatar: string | null;
+  isWorking?: boolean;
+  // Add the seat details property
+  seatDetails?: SeatDetails | null;
 }
 
 interface FriendRequest {
@@ -96,16 +103,29 @@ export class FriendsService {
     });
   }
 
-  getCheckInStatus(userId: number): Observable<{ [key: number]: boolean }> {
+  getCheckInStatus(userId: number): Observable<{
+    [key: number]: { isCheckedIn: boolean; seatDetails?: SeatDetails | null };
+  }> {
     return this.http
       .get<any[]>(`${this.apiUrl}/friends/friends-status/${userId}`)
       .pipe(
         map((friendsStatusArray) => {
-          // Create a map of friend IDs to their checked-in status
-          let statusMap: { [key: number]: boolean } = {};
+          let statusMap: {
+            [key: number]: {
+              isCheckedIn: boolean;
+              seatDetails?: SeatDetails | null;
+            };
+          } = {};
+
           friendsStatusArray.forEach((friendStatus) => {
-            statusMap[friendStatus.friend.id] = friendStatus.is_checked_in;
+            const checkedInStatus = friendStatus.is_checked_in;
+
+            statusMap[friendStatus.friend.id] = {
+              isCheckedIn: !!checkedInStatus.is_checked_in,
+              seatDetails: checkedInStatus.seat_details ?? null
+            };
           });
+
           return statusMap;
         }),
         catchError((error) => {
