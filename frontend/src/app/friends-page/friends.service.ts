@@ -96,21 +96,21 @@ export class FriendsService {
     });
   }
 
-  getWorkingStatus(userId: number): Observable<boolean> {
+  getCheckInStatus(userId: number): Observable<{ [key: number]: boolean }> {
     return this.http
-      .get<any>(`${this.apiUrl}/coworking/reservation/${userId}`)
+      .get<any[]>(`${this.apiUrl}/friends/friends-status/${userId}`)
       .pipe(
-        map((reservation) => {
-          const now = new Date();
-          return (
-            reservation.state === 'ACTIVE' &&
-            new Date(reservation.start) <= now &&
-            new Date(reservation.end) >= now
-          );
+        map((friendsStatusArray) => {
+          // Create a map of friend IDs to their checked-in status
+          let statusMap: { [key: number]: boolean } = {};
+          friendsStatusArray.forEach((friendStatus) => {
+            statusMap[friendStatus.friend.id] = friendStatus.is_checked_in;
+          });
+          return statusMap;
         }),
         catchError((error) => {
-          console.error('Error fetching working status:', error);
-          return of(false);
+          console.error('Error fetching check-in status:', error);
+          return of({});
         })
       );
   }

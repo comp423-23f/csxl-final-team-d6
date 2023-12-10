@@ -12,8 +12,8 @@
         <mat-list-item *ngFor="let friend of friends">
           <!-- Display friend's name, ID, and working status with a colon -->
           {{ friend.first_name }} (ID: {{ friend.id }}):
-          <span [class.working]="friend.isWorking">
-            {{ friend.isWorking ? 'Working' : 'Not Working' }}
+          <span [class.cheked-in]="friend.isWorking">
+            {{ friend.isWorking ? 'Checked In' : 'Not Checked In' }}
           </span>
         </mat-list-item>
       </mat-list>
