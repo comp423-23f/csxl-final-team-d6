@@ -4,6 +4,7 @@ from backend.services.exceptions import ResourceNotFoundException
 from ..services.friend import FriendRequestService
 from ..models.friend import FriendRequest as FriendRequestModel
 from ..models.user import User
+from ..services.coworking.reservation import ReservationService
 from .authentication import registered_user
 
 api = APIRouter(prefix="/api/friends")
@@ -185,3 +186,24 @@ def get_friend_information(
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+@api.get("/friends-status/{user_id}", response_model=list[dict], tags=["Friends"])
+def get_friends_status(
+    user_id: int,
+    friend_request_svc: FriendRequestService = Depends(),
+    reservation_svc: ReservationService = Depends(),  # Ensure this dependency is injected
+    subject: User = Depends(registered_user),
+):
+    """
+    Get the check-in status of all friends for a given user.
+
+    - **user_id**: ID of the user to get friends' status for.
+    """
+    # Ensure the user is authorized to view this information
+    if subject.id != user_id:
+        raise HTTPException(
+            status_code=403, detail="Unauthorized to view this information."
+        )
+
+    return friend_request_svc.get_friends_check_in_status(user_id, reservation_svc)
