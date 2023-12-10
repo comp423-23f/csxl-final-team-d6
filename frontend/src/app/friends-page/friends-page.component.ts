@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FriendsService } from './friends.service';
 
+interface SeatDetails {
+  title: string;
+  shorthand: string;
+}
+
 interface User {
   id: number;
   pid: number;
@@ -13,6 +18,8 @@ interface User {
   github_id: number | null;
   github_avatar: string | null;
   isWorking?: boolean;
+  // Add the seat details property
+  seatDetails?: SeatDetails | null;
 }
 
 @Component({
@@ -58,20 +65,40 @@ export class FriendsPageComponent implements OnInit {
     if (this.currentProfile && this.currentProfile.id) {
       this.friendsService.getAllFriends(this.currentProfile.id).subscribe(
         (friends) => {
-          friends.forEach((friend) => {
-            this.friendsService.getWorkingStatus(friend.id).subscribe(
-              (isWorking) => {
-                friend.isWorking = isWorking;
-              },
-              (error) =>
-                console.error(
-                  `Error fetching working status for user ${friend.id}:`,
-                  error
-                )
+          if (this.currentProfile && this.currentProfile.id) {
+            // Null check for currentProfile
+            this.friendsService
+              .getCheckInStatus(this.currentProfile.id)
+              .subscribe(
+                (statusMap) => {
+                  console.log('hello'); // Debugging
+
+                  console.log('Status Map:', statusMap); // Debugging
+
+                  friends.forEach((friend) => {
+                    if (statusMap[friend.id]) {
+                      friend.isWorking = statusMap[friend.id].isCheckedIn;
+                      friend.seatDetails = statusMap[friend.id].seatDetails;
+                    } else {
+                      friend.isWorking = false;
+                      friend.seatDetails = null;
+                    }
+                    console.log(
+                      `Friend ID: ${friend.id}, isWorking: ${friend.isWorking}, Seat Details:`,
+                      friend.seatDetails
+                    ); // Additional debugging
+                  });
+                  this.friends = [...friends]; // Update the reference to trigger change detection
+                  console.log('Friends loaded:', this.friends);
+                },
+                (error) =>
+                  console.error('Error fetching check-in statuses:', error)
+              );
+          } else {
+            console.error(
+              'Current user profile or ID is null. Cannot load check-in statuses.'
             );
-          });
-          this.friends = friends;
-          console.log('Friends loaded:', this.friends);
+          }
         },
         (error) => console.error('Error fetching friends:', error)
       );

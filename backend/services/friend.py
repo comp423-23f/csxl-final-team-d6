@@ -14,6 +14,8 @@ from ..models.friend import FriendshipModel
 from ..entities import FriendRequest
 from ..entities import Friendship
 from .exceptions import ResourceNotFoundException
+from ..services.coworking.reservation import ReservationService
+from ..entities.coworking.reservation_entity import ReservationEntity
 from ..entities import UserEntity
 
 __authors__ = ["Your Name", "Other Contributors"]
@@ -252,3 +254,32 @@ class FriendRequestService:
         ).first()
 
         return friend.to_model()
+
+    def get_friends_check_in_status(
+        self, user_id: int, resrvation_svc: ReservationService
+    ) -> list[dict]:
+        friends = self.list_friends(user_id)
+        friend_statuses = []
+        for friend in friends:
+            if friend.id is not None:
+                reservation_id = self._get_reservation_id_for_friend(friend.id)
+                if reservation_id is not None:
+                    is_checked_in = resrvation_svc.is_user_checked_in(reservation_id)
+                    friend_statuses.append(
+                        {"friend": friend, "is_checked_in": is_checked_in}
+                    )
+                else:
+                    friend_statuses.append({"friend": friend, "is_checked_in": False})
+
+        return friend_statuses
+
+    def _get_reservation_id_for_friend(self, friend_id: int) -> Optional[int]:
+        reservation = (
+            self._session.query(ReservationEntity)
+            .join(ReservationEntity.users)
+            .filter(UserEntity.id == friend_id)
+            .order_by(ReservationEntity.created_at.desc())
+            .first()
+        )
+
+        return reservation.id if reservation else None

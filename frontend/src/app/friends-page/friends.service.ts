@@ -2,8 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of } from 'rxjs';
 
+interface SeatDetails {
+  title: string;
+  shorthand: string;
+}
+
 interface User {
-  isWorking: boolean;
   id: number;
   pid: number;
   onyen: string;
@@ -14,6 +18,9 @@ interface User {
   github: string;
   github_id: number | null;
   github_avatar: string | null;
+  isWorking?: boolean;
+  // Add the seat details property
+  seatDetails?: SeatDetails | null;
 }
 
 interface FriendRequest {
@@ -96,21 +103,34 @@ export class FriendsService {
     });
   }
 
-  getWorkingStatus(userId: number): Observable<boolean> {
+  getCheckInStatus(userId: number): Observable<{
+    [key: number]: { isCheckedIn: boolean; seatDetails?: SeatDetails | null };
+  }> {
     return this.http
-      .get<any>(`${this.apiUrl}/coworking/reservation/${userId}`)
+      .get<any[]>(`${this.apiUrl}/friends/friends-status/${userId}`)
       .pipe(
-        map((reservation) => {
-          const now = new Date();
-          return (
-            reservation.state === 'ACTIVE' &&
-            new Date(reservation.start) <= now &&
-            new Date(reservation.end) >= now
-          );
+        map((friendsStatusArray) => {
+          let statusMap: {
+            [key: number]: {
+              isCheckedIn: boolean;
+              seatDetails?: SeatDetails | null;
+            };
+          } = {};
+
+          friendsStatusArray.forEach((friendStatus) => {
+            const checkedInStatus = friendStatus.is_checked_in;
+
+            statusMap[friendStatus.friend.id] = {
+              isCheckedIn: !!checkedInStatus.is_checked_in,
+              seatDetails: checkedInStatus.seat_details ?? null
+            };
+          });
+
+          return statusMap;
         }),
         catchError((error) => {
-          console.error('Error fetching working status:', error);
-          return of(false);
+          console.error('Error fetching check-in status:', error);
+          return of({});
         })
       );
   }

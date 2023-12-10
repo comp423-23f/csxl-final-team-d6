@@ -64,3 +64,12 @@ def cancel_reservation(
     return reservation_svc.change_reservation(
         subject, ReservationPartial(id=id, state=ReservationState.CANCELLED)
     )
+
+
+@api.get("/reservation/{id}/check-in-status", tags=["Coworking"])
+def get_check_in_status(
+    id: int,
+    subject: User = Depends(registered_user),
+    reservation_svc: ReservationService = Depends(),
+) -> dict:
+    return reservation_svc.is_user_checked_in(id)
