@@ -58,20 +58,26 @@ export class FriendsPageComponent implements OnInit {
     if (this.currentProfile && this.currentProfile.id) {
       this.friendsService.getAllFriends(this.currentProfile.id).subscribe(
         (friends) => {
-          friends.forEach((friend) => {
-            this.friendsService.getWorkingStatus(friend.id).subscribe(
-              (isWorking) => {
-                friend.isWorking = isWorking;
-              },
-              (error) =>
-                console.error(
-                  `Error fetching working status for user ${friend.id}:`,
-                  error
-                )
+          if (this.currentProfile && this.currentProfile.id) {
+            // Null check for currentProfile
+            this.friendsService
+              .getCheckInStatus(this.currentProfile.id)
+              .subscribe(
+                (statusMap) => {
+                  friends.forEach((friend) => {
+                    friend.isWorking = statusMap[friend.id] || false;
+                  });
+                  this.friends = [...friends]; // Update the reference to trigger change detection
+                  console.log('Friends loaded:', this.friends);
+                },
+                (error) =>
+                  console.error('Error fetching check-in statuses:', error)
+              );
+          } else {
+            console.error(
+              'Current user profile or ID is null. Cannot load check-in statuses.'
             );
-          });
-          this.friends = friends;
-          console.log('Friends loaded:', this.friends);
+          }
         },
         (error) => console.error('Error fetching friends:', error)
       );
