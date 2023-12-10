@@ -182,3 +182,27 @@ h1, h2 {
   gap: 8px; /* Space between Remove and Favorite buttons */
 }
 
+/* New style for 'Add a friend' button to match 'DETAILS' button */
+.add-friend-button {
+  background-color: #ffffff; /* Assuming the DETAILS button has a white background */
+  color: #000000; /* Assuming the DETAILS button text is black */
+  border: 1px solid #000000; /* Assuming the DETAILS button has a black border */
+  padding: 5px 10px; /* Matching padding to the DETAILS button */
+  border-radius: 4px; /* Matching border-radius to the DETAILS button */
+  cursor: pointer;
+  outline: none;
+  text-transform: uppercase; /* If the DETAILS button text is uppercase */
+  font-size: 14px; /* Matching font size to the DETAILS button */
+  box-shadow: none; /* Assuming the DETAILS button does not have a box-shadow */
+}
+
+.add-friend-button:hover {
+  background-color: #e0e0e0; /* Light grey background on hover to match DETAILS button */
+}
+
+.custom-search-bar {
+  width: 300px; /* Adjust the width as needed */
+  height: 80px; /* Adjust the height as needed */
+}
+
+
