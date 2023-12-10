@@ -669,3 +669,14 @@ class ReservationService:
             if len(seat.availability) > 0:
                 available_seats.append(seat)
         return available_seats
+
+    def is_user_checked_in(self, reservation_id: int) -> bool:
+        reservation: ReservationEntity | None = self._session.get(
+            ReservationEntity, reservation_id
+        )
+        if reservation is None:
+            raise ResourceNotFoundException(
+                f"No reservation with an ID of {reservation_id} found."
+            )
+
+        return reservation.state == ReservationState.CHECKED_IN
