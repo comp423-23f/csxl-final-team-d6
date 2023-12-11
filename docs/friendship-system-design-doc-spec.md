@@ -1,5 +1,7 @@
 # Technical Specifification Documentation
 
+### Authors: Jasper Ou, Wilson Haynie, Amit Garine, Nikhil Sarin
+
 ## 1. Descriptions and representations of new/modified model representation(s) and API routes supporting your feature’s stories
 
 ### Models:
@@ -104,3 +106,36 @@ For the database, navigate to `/backend/entities/friend_request_entity.py` and `
 For the API routes, navigate to `/backend/api/friend.py`. Here, there will be all of the API routes that the service works with.
 
 For the model, navigate to `/backend/models/friend.py`. Here, there will be the two models that this feature uses.
+
+## 5. Demonstration of feature from the end user persona’s perspective
+
+Here is a short demonstration of the friendship system feature and how a user will see it on their end. For this demonstration, Amit will be adding Wilson as a friend in the CSXL.
+
+### Add Friend
+
+Here, Amit has searched for Wilson using the search bar. After, Amit can click on the `Add` button next to Wilson's name and outgoing friend requests widget will update accordingly.
+
+![Add_Friend](images/Add%20Friend_converted.png)
+
+### Accept/Decline Request
+On Wilson's end, he can see Amit's friend request. Wilson has the option to click on the `Accept` or `Decline` buttons based on whather or not he wants to become friends with Amit.
+
+![Friend_Request](images/Friend%20Request_converted.png)
+
+After Wilson chooses whether or not he wants to become friends with Amit, his friends page will update accordingly. For the sake of this demonstration, Wilson has decided to become friends with Amit
+
+![Friend_Added](images/Friend%20Added_converted.png)
+
+If Wilson were to decline Amit's friend request, then Wilson's page would go back to saying "No incoming friend requests"
+
+### Working Status With Information
+
+Now that Amit and Wilson have become friends, Amit (and Wilson) both have the option to see each other's working status on the `Coworking Status` widget. In this demonstration, this is what Amit will see once him and Wilson have become friends
+
+![Coworking_Status](images/Working%20Status_converted.png)
+
+Notice that Wilson's status says "Not Checked In." Once Wilson checks into the CSXL, Amit's page will update such that it shows that Wilson has checked in and where he is sitting in the CSXL so that Amit can find him.
+
+![Checked_In](images/Check%20In_converted.png)
+
+
