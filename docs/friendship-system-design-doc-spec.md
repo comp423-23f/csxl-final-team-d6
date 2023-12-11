@@ -1,60 +1,64 @@
 # Technical Specifification Documentation
 
-## 1. Descriptions and sample data representations of new or modified model representation(s) and API routes supporting your feature’s stories
+### Authors: Jasper Ou, Wilson Haynie, Amit Garine, Nikhil Sarin
+
+## 1. Descriptions and representations of new/modified model representation(s) and API routes supporting your feature’s stories
 
 ### Models:
 
-We created a new model to represent a friend request within the program. Specifically, this model was designed such that it only has the neccessery details of a friend request. These details include the ID of the person who sends a request, a person who recieves a request, an acceptance status, and a timestamp of creation.
+For our feature, there are two new models — one for a friend request and one for a frienship. 
 
-This model can be found in `/backend/models/friends.py`. Here is a representation of the model:
+For the friend request model, it was designed such that it only contained the neccessery details of a friend request. These details include a person who recieves a request, an ID for the person who sends a request,  an acceptance status, and a timestamp of creation.
 
+The friendship model was similarly designed to contain the neccessery details needed for a friendship. These details include a user ID and a friend ID.
+
+These two models can be found in `/backend/models/friends.py`. Here is a representation of each model:
+
+1. `FriendRequest` Model
 ```python
 class FriendRequest(BaseModel):
-    """
-    Pydantic model to represent a `FriendRequest`.
-
-Descriptions and sample data representations of new or modified model representation(s) and API routes supporting your feature’s stories:
-
-Friend Request Model :
-
-The model represents a friend request within the program. It was designed to have only the necessary details of a friend request; which includes the IDs of the sender and the reciever as well as the acceptance status and the timestamp of creation.
-
-representation:
-
-class FriendRequest(BaseModel):
-"""
-Pydantic model to represent a `FriendRequest`.
-
-    This model is based on the `FriendRequest` entity, which defines the shape
-    of the `friend_requests` table in the database.
-    """
 
     id: int | None = None
     sender_id: int
     receiver_id: int
-    is_accepted: bool = False
-    pending: bool = True
-
-
     created_at: datetime | None = None
 
     class Config:
         orm_mode = True
 ```
 
-### API Routes
+2. `Friendship` Model
 
-We created a new API route for the friend request model. Specifically, this API route allows for friend requests to be sent, accepted, rejected, and allows for the user to see a list of all of their friend requests.
+```python
+class FriendshipModel(BaseModel):
 
-The API route can be found in `/backend/api/friends.py`. Here is a representation of the API route:
-  - Send Request:  `POST /api/friend-requests/{receiver_id}` 
-  - Accept Request: `PUT /api/friend-requests/accept/{request_id}`
-  - Reject Request: `PUT /api/friend-requests/reject/{request_id}`
-  - List Requests: `GET /api/friend-requests/`
+    user_id: int
+    friend_id: int
+
+    class Config:
+        orm_mode = True
+```
+
+### API Routes:
+
+From these models, there are new API routes. There are API routes for friend requests that allow the user to send a friend request, accept a friend request, and reject a friend request. Additionally, there are routes that allow the user to see a list of their incoming and outgoing friend requests. And finally, there are routes that give the user information about their friends, see their friend's working status, and the option to delete a friend.
+
+These routes canbe found in `/backend/api/friends.py`. Here is a representation of the API routes:
+  - Send Request:  `POST /api/friends/{sender_id}/{receiver_id}`
+  - Accept Request: `PUT /api/friends/accept/{sender_id}/{request_id}`
+  - Reject Request: `DELETE /api/friends/reject/{sender_id}/{request_id}`
+  - List Incoming Requests: `GET /api/friends/incoming-requests/{user_id}`
+  - List Outgoing Requests: `GET /api/friends/outgoing-requests/{user_id}`
+  - List User Friends: `GET /api/friends/friends-list/{user_ud}`
+  - Remove Friend: `DELETE /api/friends/remove-friend/{user_id}/{friend_id}`
+  - Get Friend Information: `GET /api/friends/friend-info/{friend_id}`
+  - Get Friend Status: `GET /api/friends/friends-status/{user_id}`
 
 ## 2. Description of underlying database/entity-level representation decisions
 
-The underlying database can be found in `/backend/entities/friend_request_entity.py`. This file is a SQLAlchemy ORM entity that extends `EntityBase` and maps to a table named `friend_requests` in the database. 
+1. Friend Request Entity
+
+A database can be found in `/backend/entities/friend_request_entity.py`. This file is a SQLAlchemy ORM entity that extends `EntityBase` and maps to a table named `friend_requests` in the database. 
 
 The key attributes of this database include:
  - `id`: An auto-incrementing primary key
@@ -63,9 +67,17 @@ The key attributes of this database include:
  - `created_at`: A timestamp that records when a friend request was made
  - `from_model` and `to_model`: Methods that allows this class to work with the Pydantic model
 
- This class establishes relationships with the `UserEntity` for both the sender and receiver. This, in turn, allows the `FriendRequest` instance to directly access associated user data. 
+ This class establishes relationships with the `UserEntity` for both the sender and receiver. This, in turn, allows the `FriendRequest` instance to directly access associated user data.
 
-## 3. At least one technical and one user experience design choice your team weighed the trade-offs with justification for the decision (we chose X over Y, because…)
+2. Friendship Entity
+
+Another database can be found in `/backend/entities/friendship_entity.py`. This file is also a  SQLAlchemy ORM entity that extends `EntityBase` and maps to a table named `friendships` in the database. 
+
+The key attributes of this database include:
+ - `user_id` and `friend_id`: Foreign keys that references the user's id for creating a friendship
+ - `from_model` and `to_model`: Methods that allows this class to work with the Pydantic model
+
+## 3. At least one technical and one user experience design choice your team weighed the trade-offs with justification for the decision
 
 ### Technical Design Choice
 
@@ -77,86 +89,53 @@ For the user experience, we decided to have the `Coworking Status` widget to be 
 
 ## 4. Development concerns: How does a new developer get started on your feature? Brief guide/tour of the files and concerns they need to understand to get up-to-speed.
 
-If a new developer were to get started on our feature, they would need to review these files:
-
 ### Frontend
 
-In the frontend, you need to navigate to `/frontend/src/app/friends-page`. Here, you will find the all of the important files needed for this feature such as the angular component and service needed to for a friendship system in the CSXL.
+In the frontend, navigate to `/frontend/src/app/friends-page`. Here, all of the important files needed for this feature such as the angular component and service needed to for a friendship system in the CSXL.
 
 The component manages the display and interaction of the friends within the frontend. Getting familiar with the components and event handling with regards to friend requests is particularly important for this feature. 
 
-The service handles the logic for sending, accepting, rejecting, and listing friend request on the frontend. Importantly, you must understand how this service works with the backend API routes.
+The service handles the logic for sending, accepting/rejecting, and listing friend requests and friends on the frontend. In order to get started on this feature, it is crucial to understand how this service works with the backend API routes.
 
 ### Backend
 
-In the backend, it is crucial that you understand the database, API routes, and the models that have been created.
+In the backend, it is important to understand the database, API routes, and the models that have been created.
 
-For the database, navigate to `/backend/entities/friend_request_entity.py`. This is the database that this feature works with
+For the database, navigate to `/backend/entities/friend_request_entity.py` and `/backend/entities/friendship_entity.py`. These are the databases that this feature works with.
 
-For the API routes, navigate to `/backend/api/friend.py`. Here you will find the API routes that the service works with.
+For the API routes, navigate to `/backend/api/friend.py`. Here, there will be all of the API routes that the service works with.
 
-For the model, navigate to `/backend/models/friend.py`. Here you will find the friend model that this feature uses.
+For the model, navigate to `/backend/models/friend.py`. Here, there will be the two models that this feature uses.
 
-Backend API routes that were added:
+## 5. Demonstration of feature from the end user persona’s perspective
 
-file: backend/api/friend.py
+Here is a short demonstration of the friendship system feature and how a user will see it on their end. For this demonstration, Amit will be adding Wilson as a friend in the CSXL.
 
-- Send Friend Request: POST /api/friend-requests/{receiver_id}
-  Allows a user to send a friend request
+### Add Friend
 
-- Accept Friend Request: PUT /api/friend-requests/accept/{request_id}
-  Allows the user to accept a friend request
+Here, Amit has searched for Wilson using the search bar. After, Amit can click on the `Add` button next to Wilson's name and outgoing friend requests widget will update accordingly.
 
-- Reject Friend Request: PUT /api/friend-requests/reject/{request_id}
-  Allows the user to deny a friends request.
+![Add_Friend](images/Add%20Friend_converted.png)
 
-- List Friend Requests: GET /api/friend-requests/
-  List all friend requests to the user
+### Accept/Decline Request
+On Wilson's end, he can see Amit's friend request. Wilson has the option to click on the `Accept` or `Decline` buttons based on whather or not he wants to become friends with Amit.
 
-Description of underlying database/entity-level representation decisions
+![Friend_Request](images/Friend%20Request_converted.png)
 
-The fields within the FriendRequest model are chosen to represent the basic details of a friend request. Including who sent it, who is recieving it, the acceptance status and the when the request was created. The model contains 'orm_mode = True' to allow for ORM compatability.
+After Wilson chooses whether or not he wants to become friends with Amit, his friends page will update accordingly. For the sake of this demonstration, Wilson has decided to become friends with Amit
 
-At least one technical and one user experience design choice your team weighed the trade-offs with justification for the decision (we chose X over Y, because…)
+![Friend_Added](images/Friend%20Added_converted.png)
 
-# come back to this once sprint is finalized
+If Wilson were to decline Amit's friend request, then Wilson's page would go back to saying "No incoming friend requests"
 
-Development concerns: How does a new developer get started on your feature? Brief guide/tour of the files and concerns they need to understand to get up-to-speed.
+### Working Status With Information
 
-The friend request feature allows users to send, recieve, accept and decline friend requests. There are frontend and backend aspects that allow for user interaction and handle the requests.
+Now that Amit and Wilson have become friends, Amit (and Wilson) both have the option to see each other's working status on the `Coworking Status` widget. In this demonstration, this is what Amit will see once him and Wilson have become friends
 
-For the backend:
-Understand the model:
+![Checked_In](images/Check%20In_converted.png)
 
-class FriendRequest(BaseModel):
-"""
-Pydantic model to represent a `FriendRequest`.
+Notice that Wilson's status says "Not Checked In." Once Wilson checks into the CSXL, Amit's page will update such that it shows that Wilson has checked in and where he is sitting in the CSXL so that Amit can find him.
 
-    This model is based on the `FriendRequest` entity, which defines the shape
-    of the `friend_requests` table in the database.
-    """
+![Coworking_Status](images/Working%20Status_converted.png)
 
-    id: int | None = None
-    sender_id: int
-    receiver_id: int
-    is_accepted: bool = False
-    created_at: datetime | None = None
 
-    class Config:
-        orm_mode = True
-
-The friend request model represents the structure of the friend requests within the database. Get familiar with the fields of and understand the ORM.
-
-API Routes:
-
-Contains the API endpoints for managing firend requests. Understand how each endpoint interacts with the database and the expected responses.
-
-Front end:
-
-Friends Page component:
-
-Manages the display and interaction with the friend requests within the frontend. Get familiar with Angular components and event handling related to friend requests.
-
-Friends service:
-
-Handles the logic for sending, accepting, rejecting and listing friend requests on the front end. Unserstand how the service interacts with the backend API.
