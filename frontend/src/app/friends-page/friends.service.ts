@@ -36,7 +36,8 @@ interface FriendRequest {
 export class FriendsService {
   // https://team-d6-comp423-23f.apps.cloudapps.unc.edu/api
   // http://localhost:1560/api
-  private apiUrl = 'https://team-d6-comp423-23f.apps.cloudapps.unc.edu/api';
+  private apiUrl =
+    'http://localhost:https://team-d6-comp423-23f.apps.cloudapps.unc.edu/api/api';
 
   constructor(private http: HttpClient) {}
 

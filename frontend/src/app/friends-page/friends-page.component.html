@@ -7,7 +7,7 @@
       </mat-card-header>
       <mat-list>
         <mat-list-item *ngFor="let friend of friends">
-          {{ friend.first_name }} (ID: {{ friend.id }}):
+          {{ friend.first_name }} {{ friend.last_name }}:
           <span [class.checked-in]="friend.isWorking">
             {{ friend.isWorking ? 'Checked In' : 'Not Checked In' }}
             <!-- Display Seat Details if Checked In -->
@@ -40,19 +40,17 @@
           <mat-list-item class="friend-request-item">
             <div class="friend-request-content">
               <span class="request-details">
-                {{ request.first_name }} (ID: {{ request.id }})
+                {{ request.first_name }} {{ request.last_name }}:
               </span>
               <div class="request-actions">
                 <button
-                  mat-button
-                  (click)="acceptFriendRequest(request.id)"
-                  class="add-friend-button">
+                  mat-stroked-button
+                  (click)="acceptFriendRequest(request.id)">
                   Accept
                 </button>
                 <button
-                  mat-button
-                  (click)="rejectFriendRequest(request.id)"
-                  class="add-friend-button">
+                  mat-stroked-button
+                  (click)="rejectFriendRequest(request.id)">
                   Decline
                 </button>
               </div>
@@ -75,13 +73,12 @@
           <mat-list-item class="friend-request-item">
             <div class="friend-request-content">
               <span class="request-details">
-                {{ request.first_name }} (ID: {{ request.id }})
+                {{ request.first_name }} {{ request.last_name }}
               </span>
               <div class="request-actions">
                 <button
-                  mat-button
-                  (click)="cancelFriendRequest(request.id)"
-                  class="add-friend-button">
+                  mat-stroked-button
+                  (click)="cancelFriendRequest(request.id)">
                   Cancel
                 </button>
               </div>
@@ -106,7 +103,7 @@
       <mat-card-title style="margin-bottom: 0">Friends List</mat-card-title>
 
       <!-- Add a Friend Button - Now with class for specific styling -->
-      <button mat-button (click)="toggleSearchBar()" class="add-friend-button">
+      <button mat-stroked-button (click)="toggleSearchBar()">
         Add a friend
       </button>
 
@@ -126,11 +123,8 @@
 
     <mat-list *ngIf="searchResults.length > 0">
       <mat-list-item *ngFor="let result of searchResults">
-        {{ result.first_name }} {{ result.last_name }} (ID: {{ result.id }})
-        <button
-          mat-button
-          (click)="sendFriendRequest(result)"
-          class="add-friend-button">
+        {{ result.first_name }} {{ result.last_name }}
+        <button mat-stroked-button (click)="sendFriendRequest(result)">
           Add
         </button>
       </mat-list-item>
@@ -143,13 +137,10 @@
           <mat-list-item class="friend-item">
             <div class="friend-content">
               <span class="friend-details">
-                {{ friend.first_name }} (ID: {{ friend.id }})
+                {{ friend.first_name }} {{ friend.last_name }}
               </span>
               <div class="friend-actions">
-                <button
-                  mat-button
-                  (click)="removeFriend(friend.id)"
-                  class="add-friend-button">
+                <button mat-stroked-button (click)="removeFriend(friend.id)">
                   Remove
                 </button>
               </div>
