@@ -132,10 +132,10 @@ If Wilson were to decline Amit's friend request, then Wilson's page would go bac
 
 Now that Amit and Wilson have become friends, Amit (and Wilson) both have the option to see each other's working status on the `Coworking Status` widget. In this demonstration, this is what Amit will see once him and Wilson have become friends
 
-![Coworking_Status](images/Working%20Status_converted.png)
+![Checked_In](images/Check%20In_converted.png)
 
 Notice that Wilson's status says "Not Checked In." Once Wilson checks into the CSXL, Amit's page will update such that it shows that Wilson has checked in and where he is sitting in the CSXL so that Amit can find him.
 
-![Checked_In](images/Check%20In_converted.png)
+![Coworking_Status](images/Working%20Status_converted.png)
 
 
